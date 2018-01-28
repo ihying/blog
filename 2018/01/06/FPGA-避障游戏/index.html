@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>FPGA.避障游戏 | luheng&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="FPGA" />
+  
+  
+  
+  
+  <meta name="description" content="这是一个使用FPGA制作的小游戏，知识主要是VGA的使用和关于游戏的逻辑处理。在这篇中将会讲诉VGA的显示原理和使用，还有一些关于键盘的消抖的小知识。">
+<meta name="keywords" content="FPGA">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FPGA.避障游戏">
+<meta property="og:url" content="http://www.luheng.online/2018/01/06/FPGA-避障游戏/index.html">
+<meta property="og:site_name" content="luheng&#39;s blog">
+<meta property="og:description" content="这是一个使用FPGA制作的小游戏，知识主要是VGA的使用和关于游戏的逻辑处理。在这篇中将会讲诉VGA的显示原理和使用，还有一些关于键盘的消抖的小知识。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/bizhang_game/shamite.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/bizhang_game/key.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/bizhang_game/rs.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/bizhang_game/hc.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/bizhang_game/table.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/bizhang_game/h.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/bizhang_game/v.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/bizhang_game/ban.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/bizhang_game/suiji.PNG">
+<meta property="og:updated_time" content="2018-01-08T02:38:07.559Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="FPGA.避障游戏">
+<meta name="twitter:description" content="这是一个使用FPGA制作的小游戏，知识主要是VGA的使用和关于游戏的逻辑处理。在这篇中将会讲诉VGA的显示原理和使用，还有一些关于键盘的消抖的小知识。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/bizhang_game/shamite.PNG">
+  
+    <link rel="alternate" href="/atom.xml" title="luheng&#39;s blog" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+
+
+<header id="allheader" class="site-header" role="banner" 
+   >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" title="luheng&#39;s blog" rel="home"> luheng&#39;s blog </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">首页</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">归档</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">分类</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">标签</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">关于</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/guestbook">留言</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-FPGA-避障游戏" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      FPGA.避障游戏
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/01/06/FPGA-避障游戏/" class="article-date">
+	  <time datetime="2018-01-06T04:21:12.000Z" itemprop="datePublished">一月 6, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/搞硬件/">搞硬件</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这是一个使用FPGA制作的小游戏，知识主要是VGA的使用和关于游戏的逻辑处理。在这篇中将会讲诉VGA的显示原理和使用，还有一些关于键盘的消抖的小知识。</p>
+<a id="more"></a>
+<h1 id="游戏介绍"><a href="#游戏介绍" class="headerlink" title="游戏介绍"></a>游戏介绍</h1><h2 id="游戏规则"><a href="#游戏规则" class="headerlink" title="游戏规则"></a>游戏规则</h2><blockquote>
+<p>利用FPGA，以640*480的分辨率使用VGA显示，玩家利用按键操作位于屏幕左侧的方块移动，来躲避从屏幕右侧向左边移动的留有一定间隙的障碍物。</p>
+</blockquote>
+<h2 id="游戏要求"><a href="#游戏要求" class="headerlink" title="游戏要求"></a>游戏要求</h2><blockquote>
+<p>画面及操作尽量连续，游戏结束时玩家操作的物体变成红色，按下重新开始后复位游戏，随着时间变长加速以提高难度。</p>
+</blockquote>
+<p>基本上整个游戏就像是以前的飞机小游戏，为了增加可玩性，我将游戏设置为方块自动降落，外部只有一个按键，实现方块的向上移动，去躲避向左移动的挡板。</p>
+<h1 id="设计分析"><a href="#设计分析" class="headerlink" title="设计分析"></a>设计分析</h1><h2 id="模块设定"><a href="#模块设定" class="headerlink" title="模块设定"></a>模块设定</h2><p>首先游戏要有显示画面，所以少不了vga的显示模块；其次是要控制方块的移动，需要键盘的输入模块，最后是关于游戏的逻辑控制，这需要一个控制模块。</p>
+<p>那这些模块都需要什么哪些信号呢？接着分析下。</p>
+<h2 id="键盘模块"><a href="#键盘模块" class="headerlink" title="键盘模块"></a>键盘模块</h2><p>键盘模块作为整个避障游戏系统的输入，它主要是为其他模块提供信号，对信号的处理并不多。</p>
+<table>
+<thead>
+<tr>
+<th>输入</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>clk</td>
+<td>时钟</td>
+</tr>
+<tr>
+<td>reset</td>
+<td>复位</td>
+</tr>
+<tr>
+<td>up</td>
+<td>使方块上升</td>
+</tr>
+<tr>
+<td><strong>输出</strong></td>
+<td><strong>功能描述</strong></td>
+</tr>
+<tr>
+<td>up_key_press</td>
+<td>方块上升信号</td>
+</tr>
+<tr>
+<td>down_key_press</td>
+<td>方块下降信号</td>
+</tr>
+</tbody>
+</table>
+<p>前面说了，为了增加可玩性，所以我在系统内部设置了让方块自动下落，所以输入只有up,但是输出时会有down_key_press。</p>
+<p>关于键盘的输入输出就是如此，至于模块如何实现这些功能，分析阶段不解释，在下文中会陆陆续续讲解。</p>
+<h2 id="VGA模块"><a href="#VGA模块" class="headerlink" title="VGA模块"></a>VGA模块</h2><p>vga模块的功能就是将数据显示，原理在下文我会讲解，弄懂它的时序后，问题不会太大，一开始可以尝试先显示个彩条之类的，测试下，找下感觉。</p>
+<table>
+<thead>
+<tr>
+<th>输入</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>clk</td>
+<td>时钟</td>
+</tr>
+<tr>
+<td>reset</td>
+<td>复位</td>
+</tr>
+<tr>
+<td><strong>输出</strong></td>
+<td><strong>功能描述</strong></td>
+</tr>
+<tr>
+<td>dat_act</td>
+<td>数据有效标志位</td>
+</tr>
+<tr>
+<td>hc</td>
+<td>行扫描计数器</td>
+</tr>
+<tr>
+<td>vc</td>
+<td>列扫描计数器</td>
+</tr>
+<tr>
+<td>hsync</td>
+<td>行同步信号</td>
+</tr>
+<tr>
+<td>vsync</td>
+<td>场同步信号</td>
+</tr>
+</tbody>
+</table>
+<h2 id="控制模块"><a href="#控制模块" class="headerlink" title="控制模块"></a>控制模块</h2><p>控制模块这个部分是整个游戏的规则的设定，可以说，游戏怎么玩完全由这个模块决定，根据游戏的描述和要求，我们是要控制一个方块去躲避不断向左移动的挡板，所以这个挡板和方块怎么“弄出来”就是关键了。</p>
+<p>怎么弄出来呢?</p>
+<p>首先要有个概念，我们所看到的VGA图像都是一个个像素点组成，使用640*480 的显示模式，这个规定相当于为我们规定了横纵坐标的定义域，在这个二维屏幕上。方块和遮挡板就可以用数学式子“画”出来，例如边长为两个像素点一个方块就是：0&lt;x&lt;2 ,0&lt;y&lt;2。</p>
+<p>友情提醒：FPAG中能用正数就尽量不要用负数，数字在FPGA中是用补码表示的，负数的补码往往与我们的思维逻辑有点出入，容易导致出错。</p>
+<table>
+<thead>
+<tr>
+<th>输入</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>clk</td>
+<td>时钟</td>
+</tr>
+<tr>
+<td>reset</td>
+<td>复位</td>
+</tr>
+<tr>
+<td>up_key_press</td>
+<td>方块上升信号</td>
+</tr>
+<tr>
+<td>down_key_press</td>
+<td>方块的下降信号</td>
+</tr>
+<tr>
+<td>hc</td>
+<td>行扫描计数器</td>
+</tr>
+<tr>
+<td>vc</td>
+<td>列扫描计数器</td>
+</tr>
+<tr>
+<td>dat_act</td>
+<td>数据有效标志位（用于消隐）</td>
+</tr>
+<tr>
+<td><strong>输出</strong></td>
+<td><strong>功能描述</strong></td>
+</tr>
+<tr>
+<td>disp_RGB</td>
+<td>显示所需的数据</td>
+</tr>
+</tbody>
+</table>
+<h2 id="总体的设计图"><a href="#总体的设计图" class="headerlink" title="总体的设计图"></a>总体的设计图</h2><p><img src="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/bizhang_game/shamite.PNG" alt=""></p>
+<h1 id="方案设计"><a href="#方案设计" class="headerlink" title="方案设计"></a>方案设计</h1><h2 id="键盘模块-1"><a href="#键盘模块-1" class="headerlink" title="键盘模块"></a>键盘模块</h2><p>键盘模块的要点在于消抖，和控制方块移动。</p>
+<h3 id="消抖"><a href="#消抖" class="headerlink" title="消抖"></a>消抖</h3><p>无论是什么器件，键盘的消抖都是老套路，分为硬件消抖和软件消抖，硬件消抖如使用RS触发器实现或者是加电容实现，一般是制作板子的时候考虑加上去的，平时我们使用现成的板子，大多数都是使用软件消抖。</p>
+<p>键盘产生抖动是机械特性，在我们按下按键是接触点的电压波形大致如下图：</p>
+<p><img src="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/bizhang_game/key.PNG" alt=""></p>
+<p>从图可以看出，按下时会有一段上下波动的波形，松开时也有一段。</p>
+<p>软件消抖常用的方法是延时，作用就是避开这一段“抖动”的波形，达到消抖的目的。</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(counter &lt;= T) <span class="comment">//按的时间不够长</span></span><br><span class="line">	<span class="keyword">begin</span></span><br><span class="line">		counter = counter + <span class="number">1'b1</span>;</span><br><span class="line">        up_key_press &lt;= <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">else</span>  <span class="comment">//按下足够久了，认为是真的按下</span></span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">         counter &lt;= <span class="number">0</span>;</span><br><span class="line">         up_key_press &lt;= <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>硬件消抖这里也稍微拓展下。</p>
+<p>RS触发器实现</p>
+<p><img src="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/bizhang_game/rs.jpg" alt=""></p>
+<p>图中两个“与非”门构成一个RS触发器。当按键未按下时，输出为0;当键按下时，输出为1。此时即使用按键的机械性能，使按键因弹性抖动而产生瞬时断开（抖动跳开B），只要按键不返回原始状态A，双稳态电路的状态不改变，输出保持为0，不会产生抖动的波形。也就是说，即使B点的电压波形是抖动的，但经双稳态电路之后，其输出为正规的矩形波。这一点通过分析RS触发器的工作过程很容易得到验证。</p>
+<p>至于其他的硬件消抖电路，如：用电容构成的积分电路实现，采用D触发器实现，这里不再拓展，如有兴趣，可自行查阅资料。</p>
+<h3 id="控制移动"><a href="#控制移动" class="headerlink" title="控制移动"></a>控制移动</h3><p>这个功能的实现，应该说不难。知道要改变哪个参数能使它移动，改变它就可以实现了，在这个游戏系统中，控制方块上下移动是改变 move_y 这个参数，左右移动是改变move_x，不过在后面测试游戏时，我觉得左右移动没有必要加上去，就把它去了,具体的操作看代码吧。</p>
+<h2 id="VGA模块-1"><a href="#VGA模块-1" class="headerlink" title="VGA模块"></a>VGA模块</h2><p>实现这个游戏，我认为最重要的知识就是VGA的显示原理了。数据怎么显示在屏幕的？640和480指的又是什么？我们先看它的原理。</p>
+<h3 id="VGA原理"><a href="#VGA原理" class="headerlink" title="VGA原理"></a>VGA原理</h3><p>VGA从扫描方式上分行扫描和场扫描两种，扫描就是一个电子枪（CRT），啾啾啾的扫，水平方向叫行扫描，垂直方向叫场扫描，这个电子枪它又可发出三种颜色光，分别是R(红色)，G(绿色)，B(蓝色)，光的三原色都有，原则上三原色按照比例不同搭配，那你想要什么颜色就可以给你什么颜色，但实际上呢，VGA中红，绿，蓝的输入线分别是3,3,2根；也就是说红色有2^3=8种，同理，绿色八种，蓝色四种，相互搭配，便有8  X 8  X 4=256种搭配，也就是VGA能显示256种颜色。</p>
+<p>扫描过程是怎样的？</p>
+<p>以行扫描为例:</p>
+<p><img src="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/bizhang_game/hc.PNG" alt=""></p>
+<p>从图可以看出，电子枪从左往右扫射一行回头再到下一行，直至最后完成一帧画面，又重头开始。那什么时候掉头，什么时候算是完成一帧画面，这就有个区域了，区域怎么定，是由显示模式决定的，看下图。</p>
+<p><img src="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/bizhang_game/table.PNG" alt=""></p>
+<p>我们可以看到有多种显示模式，不同的显示模式所需的时钟频率可是不一样的，如果细心查看，就会注意到，行时序的c区和列时序的q区恰好是640和480这两个熟悉的数字，其实这就是显示时序段的范围。 </p>
+<p> VGA中定义行时序和场时序都需要同步脉冲（Sync a）、显示后沿（Back porch b）、显示时序段（Display interval c）和显示前沿（Front porch d）四部分。只有在显示时序段，也就是C区才可以信号显示出来，其他区域，你就算给VGA信号，你也看不到。</p>
+<p><strong>行时序</strong></p>
+<p><img src="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/bizhang_game/h.PNG" alt=""></p>
+<p><strong>场时序</strong></p>
+<p><img src="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/bizhang_game/v.PNG" alt=""></p>
+<p>那么我们怎么知道，电子枪（CRT）有没有扫描到显示时序段呢？方法是加入行同步计数器和列同步计数器用，反正时序是固定的，行同步计数器是扫一下计数器加一，列计数器是一行扫完计数器加一，两者都扫到C区了，也就是计数器都达到一定数值（a区长度+B区长度），表明屏幕可以显示信号，我就给信号，要黑色，rgb全给0，要白色，全给1，反正就是给信号，这和在坐标轴上画图的感觉是一样一样的。</p>
+<h2 id="控制模块-1"><a href="#控制模块-1" class="headerlink" title="控制模块"></a>控制模块</h2><p>控制模块就像这个游戏系统的控制中心一般，制定了关于这个游戏的一切规则。</p>
+<p>主要有那么几个要点:</p>
+<ol>
+<li>将键盘的长脉冲变为一个个冲击信号，不然以FPGA本身的频率，按一下，移动得太快，方块就“上天” 了,障碍物移动也会快到你看不到。</li>
+<li>“画”方块和障碍物（挡板），并设定参数让给它们可以移动。</li>
+<li>由于挡板的垂直方向出现的位置要有随机性，所以需要产生随机数。</li>
+<li>设置游戏失败的情况，方块与挡板“撞上”这个时机的设置必须是程序完成。</li>
+</ol>
+<h3 id="长脉冲变多个短脉冲"><a href="#长脉冲变多个短脉冲" class="headerlink" title="长脉冲变多个短脉冲"></a>长脉冲变多个短脉冲</h3><p>这不难想也不难实现，就是计数器加到一定程度变为标志位变为1，然后计数器清零，标志位也变为0，一定时间内要短脉冲多点，计数器的计数值就小点，反之，大一点。</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">////  板块移动速度控制   ////</span></span><br><span class="line"><span class="keyword">reg</span> move;</span><br><span class="line"><span class="keyword">reg</span> [<span class="number">32</span>:<span class="number">0</span>]counter;</span><br><span class="line"><span class="keyword">reg</span> [<span class="number">30</span>:<span class="number">0</span>]T_move;</span><br><span class="line"><span class="keyword">always</span>@(<span class="keyword">posedge</span> clk,<span class="keyword">negedge</span> reset)</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(!reset)</span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">        T_move = <span class="number">30'd10_000_00</span>;</span><br><span class="line">        counter &lt;= <span class="number">0</span>;</span><br><span class="line">        move &lt;=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(counter &gt;= T_move)</span><br><span class="line">        <span class="keyword">begin</span></span><br><span class="line">            move = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span>(T_move == <span class="number">100_000</span>)</span><br><span class="line">                T_move &lt;=T_move;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                T_move = T_move-<span class="number">10</span>;</span><br><span class="line">            counter = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> </span><br><span class="line">        <span class="keyword">begin</span></span><br><span class="line">            move = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">if</span>(!stop)</span><br><span class="line">                counter= counter + <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                counter = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<h3 id="“画”方块和挡板"><a href="#“画”方块和挡板" class="headerlink" title="“画”方块和挡板"></a>“画”方块和挡板</h3><p>关于如何“画”，前面举过画方块的例子，就是把行列计数器当做 x,y。x给个区域，y给个区域，再给个颜色，就画出来了。至于移动呢，移动就代表着位置是个变量，设定一个x,y都是变量的点，然后以这个点为中心画出你要的方块或者挡板，改变这个点的x,y便是将它移动。</p>
+<p>以挡板从右向左移动为例：</p>
+<p><img src="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/bizhang_game/ban.PNG" alt=""></p>
+<h3 id="产生随机数"><a href="#产生随机数" class="headerlink" title="产生随机数"></a>产生随机数</h3><p>产生伪随机数的方法最常见的是利用一种线性反馈移位寄存器(LFSR),它是由n个D触发器和若干个异或门组成的，如下图：</p>
+<p><img src="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/bizhang_game/suiji.PNG" alt=""></p>
+<p>实际上这个有规律可循的，只不过D触发器一多，显得很乱，很像随机产生的样子，但确实不是真正意义上的随机数，是个伪随机数，但在这里使用足够了的。</p>
+<p>但这种方法也有bug,就是高位它不容易变化的时候，挡板垂直方向就不够分散，举个例子，以8个D触发器组成的为例，数字范围从0~1111_1111,如果高位变化不大，如从1110_0000变成1110_0101,高位不怎么变化的话，整个数字大小实际上就是改变一点点，图像表现为前后两个挡板垂直位置上相差几个像素点，这就显得过于集中，而且这种办法无法生成 0 这个数字。</p>
+<p>为了将挡板”离散一点”，我就将竖直方向的长减去挡板的长度后得到的空隙分段化，分为8段，这样挡板之间的距离要么相等，不然都会有一段距离，显得离散些。怎么实现呢？</p>
+<p>每个D触发器都存有一个数字，我从中随机抽取三个数字，做一个case语句的选择，8段8种情况选择。这样随机性增加，挡板也更离散。</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">///////          随机数     //////////</span></span><br><span class="line"> <span class="keyword">reg</span> [<span class="number">7</span>:<span class="number">0</span>] rand_num;</span><br><span class="line"><span class="keyword">parameter</span> seed = <span class="number">8'b1111_1111</span>;</span><br><span class="line"><span class="keyword">always</span>@(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> reset)</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">   <span class="keyword">if</span>(!reset)</span><br><span class="line">       rand_num  &lt;= seed;</span><br><span class="line">   <span class="keyword">else</span></span><br><span class="line">       <span class="keyword">begin</span></span><br><span class="line">           rand_num[<span class="number">0</span>] &lt;= rand_num[<span class="number">1</span>] ;</span><br><span class="line">           rand_num[<span class="number">1</span>] &lt;= rand_num[<span class="number">2</span>] + rand_num[<span class="number">7</span>];</span><br><span class="line">           rand_num[<span class="number">2</span>] &lt;= rand_num[<span class="number">3</span>] + rand_num[<span class="number">7</span>];</span><br><span class="line">           rand_num[<span class="number">3</span>] &lt;= rand_num[<span class="number">4</span>] ;</span><br><span class="line">           rand_num[<span class="number">4</span>] &lt;= rand_num[<span class="number">5</span>] + rand_num[<span class="number">7</span>];</span><br><span class="line">           rand_num[<span class="number">5</span>] &lt;= rand_num[<span class="number">6</span>] + rand_num[<span class="number">7</span>];</span><br><span class="line">           rand_num[<span class="number">6</span>] &lt;= rand_num[<span class="number">7</span>] ;</span><br><span class="line">           rand_num[<span class="number">7</span>] &lt;= rand_num[<span class="number">0</span>] + rand_num[<span class="number">7</span>];     </span><br><span class="line">       <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">wire</span> [<span class="number">2</span>:<span class="number">0</span>]choose;</span><br><span class="line"><span class="keyword">reg</span> [<span class="number">8</span>:<span class="number">0</span>]<span class="keyword">type</span>;</span><br><span class="line"><span class="keyword">assign</span> choose = &#123;rand_num[<span class="number">3</span>],rand_num[<span class="number">6</span>],rand_num[<span class="number">2</span>]&#125;;</span><br><span class="line"><span class="keyword">always</span>@(<span class="keyword">posedge</span> clk )</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">case</span>(choose) </span><br><span class="line">    <span class="number">0</span>:<span class="keyword">type</span> = <span class="number">0</span>;</span><br><span class="line">    <span class="number">1</span>:<span class="keyword">type</span> = <span class="number">40</span>;</span><br><span class="line">    <span class="number">2</span>:<span class="keyword">type</span> = <span class="number">80</span>;</span><br><span class="line">    <span class="number">3</span>:<span class="keyword">type</span> = <span class="number">120</span>;</span><br><span class="line">    <span class="number">4</span>:<span class="keyword">type</span> = <span class="number">160</span>;</span><br><span class="line">    <span class="number">5</span>:<span class="keyword">type</span> = <span class="number">200</span>;</span><br><span class="line">    <span class="number">6</span>:<span class="keyword">type</span> = <span class="number">240</span>;</span><br><span class="line">    <span class="number">7</span>:<span class="keyword">type</span> = <span class="number">280</span>;</span><br><span class="line">    <span class="keyword">endcase</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="comment">////////////////////////////////////////////////////////</span></span><br></pre></td></tr></table></figure>
+<h3 id="游戏失败设置"><a href="#游戏失败设置" class="headerlink" title="游戏失败设置"></a>游戏失败设置</h3><p>游戏失败是撞上了，那 撞上 在数学上表示是什么呢？</p>
+<p>答案是方块和挡板的坐标有交叉。</p>
+<p>方块和挡板之间都有坐标的区域，只要找到它们会交叉的情况，就说明这个时候是撞上了。原理就是如此，具体的可以自己动笔算下。</p>
+<p>友情提醒：加减时注意尽量不要出现负数的情况，因为 数字用补码表示的原因，在FPGA中，直接比较 ，-1=ffff_ffff 可是大于0的。</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">wire</span> die1,die2,die3,die4;</span><br><span class="line"><span class="comment">//游戏失败定义，方块与挡板"碰撞"</span></span><br><span class="line"><span class="comment">//失败情况讨论，共设置四块挡板，四种情况</span></span><br><span class="line"><span class="keyword">assign</span> die1=((<span class="keyword">rand</span>&lt;move_y + border)&amp;&amp;(move_y &lt; <span class="keyword">rand</span>+long)&amp;&amp;(push &lt; move_x+border) &amp;&amp; (move_x &lt; push + ban ));</span><br><span class="line"><span class="keyword">assign</span> die2=((rand1&lt;move_y + border)&amp;&amp;(move_y &lt; rand1+long)&amp;&amp;(push1 &lt; move_x+border) &amp;&amp; (move_x &lt; push1 + ban ));</span><br><span class="line"><span class="keyword">assign</span> die3=((rand2&lt;move_y + border)&amp;&amp;(move_y &lt; rand2+long)&amp;&amp;(push2 &lt; move_x+border) &amp;&amp; (move_x &lt; push2 + ban ));</span><br><span class="line"><span class="keyword">assign</span> die4=((rand3&lt;move_y + border)&amp;&amp;(move_y &lt; rand3+long)&amp;&amp;(push3 &lt; move_x+border) &amp;&amp; (move_x &lt; push3 + ban ));</span><br><span class="line"></span><br><span class="line"><span class="keyword">wire</span> false;</span><br><span class="line"><span class="keyword">assign</span> false = die1||die2||die3||die4;</span><br></pre></td></tr></table></figure>
+<h1 id="代码展示"><a href="#代码展示" class="headerlink" title="代码展示"></a>代码展示</h1><h2 id="键盘模块-2"><a href="#键盘模块-2" class="headerlink" title="键盘模块"></a>键盘模块</h2><p><style><br>.testButton { color:black;font-size:12px;padding-top:10px;padding-bottom:10px;padding-left:25px;padding-right:25px;border-width:;border-color:white;border-style:;border-radius:10px;background-color:#f3f3f3;}.testButton:hover{color:white;background-color:#0684bd;border-color:#87daff;}<br></style></p>
+<p><button class="testButton" onclick="document.all.child1.style.display=(document.all.child1.style.display =='none')?'':'none'">点击显\隐代码</button></p>
+<div id="child1" style="display:"><br><br><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> key(clk,reset,up,up_key_press,down_key_press);</span><br><span class="line"><span class="keyword">input</span> clk;</span><br><span class="line"><span class="keyword">input</span> reset;</span><br><span class="line"><span class="keyword">input</span> up;</span><br><span class="line"><span class="keyword">output</span> <span class="keyword">reg</span> up_key_press;</span><br><span class="line"><span class="keyword">output</span> <span class="keyword">reg</span> down_key_press;</span><br><span class="line"></span><br><span class="line"><span class="keyword">parameter</span> T = <span class="number">30'd10_000_00</span>;  <span class="comment">//控制方块移动速度</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//////////   up 按键   /////////////</span></span><br><span class="line"><span class="keyword">reg</span> [<span class="number">30</span>:<span class="number">0</span>] counter;</span><br><span class="line"><span class="keyword">reg</span> [<span class="number">30</span>:<span class="number">0</span>] counter2;</span><br><span class="line"><span class="keyword">always</span>@(<span class="keyword">posedge</span> clk,<span class="keyword">negedge</span> reset )</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">     <span class="keyword">if</span>(!reset)</span><br><span class="line">        <span class="keyword">begin</span></span><br><span class="line">            counter &lt;= <span class="number">0</span>;</span><br><span class="line">            counter2 &lt;= <span class="number">0</span>;</span><br><span class="line">            up_key_press &lt;= <span class="number">0</span>;</span><br><span class="line">            down_key_press &lt;= <span class="number">0</span>;</span><br><span class="line">         <span class="keyword">end</span></span><br><span class="line">     <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">begin</span></span><br><span class="line">            <span class="keyword">if</span>(up)</span><br><span class="line">                <span class="keyword">begin</span></span><br><span class="line">                    <span class="keyword">if</span>(counter &lt;= T)</span><br><span class="line">                        <span class="keyword">begin</span></span><br><span class="line">                            counter = counter + <span class="number">1'b1</span>;</span><br><span class="line">                            up_key_press &lt;= <span class="number">0</span>;</span><br><span class="line">                        <span class="keyword">end</span></span><br><span class="line">                    <span class="keyword">else</span></span><br><span class="line">                        <span class="keyword">begin</span></span><br><span class="line">                            counter &lt;= <span class="number">0</span>;</span><br><span class="line">                            up_key_press &lt;= <span class="number">1</span>;</span><br><span class="line">                        <span class="keyword">end</span></span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">             <span class="keyword">else</span>  <span class="comment">//下降按钮</span></span><br><span class="line">                <span class="keyword">begin</span></span><br><span class="line">                    <span class="keyword">if</span>(counter2 &lt;= T)</span><br><span class="line">                        <span class="keyword">begin</span></span><br><span class="line">                            counter2 = counter2 +  <span class="number">1'b1</span>;</span><br><span class="line">                            down_key_press &lt;= <span class="number">0</span>;</span><br><span class="line">                        <span class="keyword">end</span></span><br><span class="line">                    <span class="keyword">else</span></span><br><span class="line">                        <span class="keyword">begin</span></span><br><span class="line">                            counter2 &lt;= <span class="number">0</span>;</span><br><span class="line">                            down_key_press &lt;= <span class="number">1</span>;</span><br><span class="line">                        <span class="keyword">end</span></span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure><br><br></div>
+
+<h2 id="VGA模块-2"><a href="#VGA模块-2" class="headerlink" title="VGA模块"></a>VGA模块</h2><p><button class="testButton" onclick="document.all.child2.style.display=(document.all.child2.style.display =='none')?'':'none'">点击显\隐代码</button></p>
+<div id="child2" style="display:"><br><br><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> vga( clk,reset,hsync, vsync,hc,vc,dat_act);</span><br><span class="line">            <span class="keyword">input</span> clk; <span class="comment">//系统输入时钟 100MHz</span></span><br><span class="line">            <span class="keyword">input</span> reset;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">output</span> hsync; <span class="comment">//VGA 行同步信号</span></span><br><span class="line">            <span class="keyword">output</span> vsync; <span class="comment">//VGA 场同步信号</span></span><br><span class="line">            <span class="keyword">output</span> dat_act;</span><br><span class="line">            <span class="keyword">output</span> [<span class="number">9</span>:<span class="number">0</span>]hc ,vc; <span class="comment">//转成640*480的模式</span></span><br><span class="line">            </span><br><span class="line">            <span class="keyword">reg</span> [<span class="number">9</span>:<span class="number">0</span>] hcount; <span class="comment">//VGA 行扫描计数器</span></span><br><span class="line">            <span class="keyword">reg</span> [<span class="number">9</span>:<span class="number">0</span>] vcount; <span class="comment">//VGA 场扫描计数器</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">reg</span> flag;</span><br><span class="line">            <span class="keyword">wire</span> hcount_ov;</span><br><span class="line">            <span class="keyword">wire</span> vcount_ov;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">wire</span> hsync;</span><br><span class="line">            <span class="keyword">wire</span> vsync;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">reg</span> vga_clk=<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">reg</span> cnt_clk=<span class="number">0</span>; <span class="comment">//分频计数</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">//VGA 行、场扫描时序参数表</span></span><br><span class="line">            <span class="keyword">parameter</span> hsync_end = <span class="number">10'd95</span>,</span><br><span class="line">            hdat_begin = <span class="number">10'd143</span>,</span><br><span class="line">            hdat_end = <span class="number">10'd783</span>,</span><br><span class="line">            hpixel_end = <span class="number">10'd799</span>,</span><br><span class="line"></span><br><span class="line">            vsync_end = <span class="number">10'd1</span>,</span><br><span class="line">            vdat_begin = <span class="number">10'd34</span>,</span><br><span class="line">            vdat_end = <span class="number">10'd514</span>,</span><br><span class="line">            vline_end = <span class="number">10'd524</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">//分频</span></span><br><span class="line">            <span class="keyword">always</span> @(<span class="keyword">posedge</span> clk)</span><br><span class="line">            <span class="keyword">begin</span></span><br><span class="line">                <span class="keyword">if</span>(cnt_clk == <span class="number">1</span>)</span><br><span class="line">                <span class="keyword">begin</span></span><br><span class="line">                    vga_clk &lt;= ~vga_clk;</span><br><span class="line">                    cnt_clk &lt;= <span class="number">0</span>;</span><br><span class="line">                 <span class="keyword">end</span></span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                    cnt_clk &lt;= cnt_clk +<span class="number">1</span>;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">//************************VGA 驱动部分*******************************//行扫描</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">always</span> @(<span class="keyword">posedge</span> vga_clk)</span><br><span class="line">            <span class="keyword">begin</span></span><br><span class="line">                <span class="keyword">if</span> (hcount_ov)</span><br><span class="line">                    hcount &lt;= <span class="number">10'd0</span>;</span><br><span class="line">                 <span class="keyword">else</span></span><br><span class="line">                     hcount &lt;= hcount + <span class="number">10'd1</span>;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">assign</span> hcount_ov = (hcount == hpixel_end);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//场扫描</span></span><br><span class="line">            <span class="keyword">always</span> @(<span class="keyword">posedge</span> vga_clk)</span><br><span class="line">            <span class="keyword">begin</span></span><br><span class="line">                <span class="keyword">if</span> (hcount_ov)</span><br><span class="line">                <span class="keyword">begin</span></span><br><span class="line">                    <span class="keyword">if</span> (vcount_ov)</span><br><span class="line">                        vcount &lt;= <span class="number">10'd0</span>;</span><br><span class="line">                    <span class="keyword">else</span></span><br><span class="line">                        vcount &lt;= vcount + <span class="number">10'd1</span>;</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">assign</span> vcount_ov = (vcount == vline_end);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//数据、同步信号输</span></span><br><span class="line">            <span class="keyword">assign</span> dat_act = ((hcount &gt;= hdat_begin) &amp;&amp; (hcount &lt; hdat_end))&amp;&amp; ((vcount &gt;= vdat_begin) &amp;&amp; (vcount &lt; vdat_end));</span><br><span class="line">            <span class="keyword">assign</span> hsync = (hcount &gt; hsync_end);</span><br><span class="line">            <span class="keyword">assign</span> vsync = (vcount &gt; vsync_end);</span><br><span class="line">           </span><br><span class="line">            <span class="comment">//计数器转成640 x 480的样式，方便开发 </span></span><br><span class="line">            <span class="keyword">assign</span> hc = hcount - hdat_begin;</span><br><span class="line">            <span class="keyword">assign</span> vc = vcount - vdat_begin;</span><br><span class="line">            </span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure><br><br></div>
+
+<h2 id="控制模块-2"><a href="#控制模块-2" class="headerlink" title="控制模块"></a>控制模块</h2><p><button class="testButton" onclick="document.all.child3.style.display=(document.all.child3.style.display =='none')?'':'none'">点击显\隐代码</button></p>
+<div id="child3" style="display:"><br><br><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> control( clk,reset, disp_RGB,hc,vc,dat_act,up_key_press,down_key_press );</span><br><span class="line">            <span class="keyword">input</span> clk; <span class="comment">//系统输入时钟 100MHz</span></span><br><span class="line">            <span class="keyword">input</span> reset;</span><br><span class="line">            <span class="keyword">input</span> dat_act;</span><br><span class="line">            <span class="keyword">input</span> [<span class="number">9</span>:<span class="number">0</span>]hc,vc;</span><br><span class="line">            <span class="keyword">input</span> up_key_press;</span><br><span class="line">            <span class="keyword">input</span> down_key_press;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">output</span> [<span class="number">2</span>:<span class="number">0</span>]disp_RGB; <span class="comment">//VGA 数据输出</span></span><br><span class="line">            </span><br><span class="line">            <span class="keyword">reg</span> [<span class="number">2</span>:<span class="number">0</span>]data;</span><br><span class="line">            <span class="keyword">reg</span> vga_clk=<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">reg</span> cnt_clk=<span class="number">0</span>; <span class="comment">//分频计数</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">//分频</span></span><br><span class="line">            <span class="keyword">always</span> @(<span class="keyword">posedge</span> clk)</span><br><span class="line">            <span class="keyword">begin</span></span><br><span class="line">                <span class="keyword">if</span>(cnt_clk == <span class="number">1</span>)</span><br><span class="line">                <span class="keyword">begin</span></span><br><span class="line">                    vga_clk &lt;= ~vga_clk;</span><br><span class="line">                    cnt_clk &lt;= <span class="number">0</span>;</span><br><span class="line">                 <span class="keyword">end</span></span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                    cnt_clk &lt;= cnt_clk +<span class="number">1</span>;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            <span class="comment">//定义正方形小块的边长</span></span><br><span class="line">            <span class="keyword">parameter</span> border = <span class="number">40</span>;</span><br><span class="line">            <span class="comment">//定义挡板的宽度</span></span><br><span class="line">            <span class="keyword">parameter</span> ban = <span class="number">20</span>;</span><br><span class="line">            <span class="comment">//定义挡板的长度</span></span><br><span class="line">            <span class="keyword">parameter</span> long = <span class="number">200</span>;</span><br><span class="line">            <span class="comment">//定义挡板的间隔</span></span><br><span class="line">            <span class="keyword">parameter</span> magin = <span class="number">160</span>;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">//VGA扫描，画出挡板和方块，并设置挡板移动的移动变量push</span></span><br><span class="line">            <span class="keyword">reg</span> [<span class="number">10</span>:<span class="number">0</span>] push,push1,push2,push3;</span><br><span class="line">            <span class="keyword">reg</span> stop;<span class="comment">//用于停止游戏</span></span><br><span class="line">            </span><br><span class="line">            <span class="comment">//小方块移动数据存储器</span></span><br><span class="line">            <span class="keyword">parameter</span> move_x = <span class="number">50</span>; <span class="comment">//方块的初始位置</span></span><br><span class="line">            <span class="keyword">reg</span> [<span class="number">9</span>:<span class="number">0</span>]move_y;</span><br><span class="line">            </span><br><span class="line"><span class="comment">///////          随机数     //////////</span></span><br><span class="line"> <span class="keyword">reg</span> [<span class="number">7</span>:<span class="number">0</span>] rand_num;</span><br><span class="line"><span class="keyword">parameter</span> seed = <span class="number">8'b1111_1111</span>;</span><br><span class="line"><span class="keyword">always</span>@(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> reset)</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">   <span class="keyword">if</span>(!reset)</span><br><span class="line">       rand_num  &lt;= seed;</span><br><span class="line">   <span class="keyword">else</span></span><br><span class="line">       <span class="keyword">begin</span></span><br><span class="line">           rand_num[<span class="number">0</span>] &lt;= rand_num[<span class="number">1</span>] ;</span><br><span class="line">           rand_num[<span class="number">1</span>] &lt;= rand_num[<span class="number">2</span>] + rand_num[<span class="number">7</span>];</span><br><span class="line">           rand_num[<span class="number">2</span>] &lt;= rand_num[<span class="number">3</span>] + rand_num[<span class="number">7</span>];</span><br><span class="line">           rand_num[<span class="number">3</span>] &lt;= rand_num[<span class="number">4</span>] ;</span><br><span class="line">           rand_num[<span class="number">4</span>] &lt;= rand_num[<span class="number">5</span>] + rand_num[<span class="number">7</span>];</span><br><span class="line">           rand_num[<span class="number">5</span>] &lt;= rand_num[<span class="number">6</span>] + rand_num[<span class="number">7</span>];</span><br><span class="line">           rand_num[<span class="number">6</span>] &lt;= rand_num[<span class="number">7</span>] ;</span><br><span class="line">           rand_num[<span class="number">7</span>] &lt;= rand_num[<span class="number">0</span>] + rand_num[<span class="number">7</span>];     </span><br><span class="line">       <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">wire</span> [<span class="number">2</span>:<span class="number">0</span>]choose;</span><br><span class="line"><span class="keyword">reg</span> [<span class="number">8</span>:<span class="number">0</span>]<span class="keyword">type</span>;</span><br><span class="line"><span class="keyword">assign</span> choose = &#123;rand_num[<span class="number">3</span>],rand_num[<span class="number">6</span>],rand_num[<span class="number">2</span>]&#125;;</span><br><span class="line"><span class="keyword">always</span>@(<span class="keyword">posedge</span> clk )</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">case</span>(choose) </span><br><span class="line">    <span class="number">0</span>:<span class="keyword">type</span> = <span class="number">0</span>;</span><br><span class="line">    <span class="number">1</span>:<span class="keyword">type</span> = <span class="number">40</span>;</span><br><span class="line">    <span class="number">2</span>:<span class="keyword">type</span> = <span class="number">80</span>;</span><br><span class="line">    <span class="number">3</span>:<span class="keyword">type</span> = <span class="number">120</span>;</span><br><span class="line">    <span class="number">4</span>:<span class="keyword">type</span> = <span class="number">160</span>;</span><br><span class="line">    <span class="number">5</span>:<span class="keyword">type</span> = <span class="number">200</span>;</span><br><span class="line">    <span class="number">6</span>:<span class="keyword">type</span> = <span class="number">240</span>;</span><br><span class="line">    <span class="number">7</span>:<span class="keyword">type</span> = <span class="number">280</span>;</span><br><span class="line">    <span class="keyword">default</span>: <span class="keyword">type</span> = <span class="number">280</span>;</span><br><span class="line">    <span class="keyword">endcase</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="comment">////////////////////////////////////////////////////////</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">////  板块移动速度控制   ////</span></span><br><span class="line"><span class="keyword">reg</span> move;</span><br><span class="line"><span class="keyword">reg</span> [<span class="number">32</span>:<span class="number">0</span>]counter;</span><br><span class="line"><span class="keyword">reg</span> [<span class="number">30</span>:<span class="number">0</span>]T_move;</span><br><span class="line"><span class="keyword">always</span>@(<span class="keyword">posedge</span> clk,<span class="keyword">negedge</span> reset)</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(!reset)</span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">        T_move = <span class="number">30'd10_000_00</span>;</span><br><span class="line">        counter &lt;= <span class="number">0</span>;</span><br><span class="line">        move &lt;=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(counter &gt;= T_move)</span><br><span class="line">        <span class="keyword">begin</span></span><br><span class="line">            move = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span>(T_move == <span class="number">100_000</span>)</span><br><span class="line">                T_move &lt;=T_move;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                T_move = T_move-<span class="number">10</span>;</span><br><span class="line">            counter = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> </span><br><span class="line">        <span class="keyword">begin</span></span><br><span class="line">            move = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">if</span>(!stop)</span><br><span class="line">                counter= counter + <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                counter = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">reg</span> [<span class="number">8</span>:<span class="number">0</span>]<span class="keyword">rand</span>,rand1,rand2,rand3;</span><br><span class="line"><span class="keyword">always</span>@(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> reset)</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span> (!reset)</span><br><span class="line">        <span class="keyword">begin</span></span><br><span class="line">           push&lt;=<span class="number">640</span>;  <span class="comment">//初始位置设定</span></span><br><span class="line">           push1 &lt;= <span class="number">640</span>+ magin;</span><br><span class="line">           push2 &lt;= <span class="number">640</span> + magin + magin;</span><br><span class="line">           push3 &lt;= <span class="number">640</span> + magin + magin + magin;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (move)</span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(push == <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">begin</span></span><br><span class="line">                 push &lt;= <span class="number">640</span>;</span><br><span class="line">                 <span class="keyword">rand</span> &lt;=<span class="keyword">type</span>; <span class="comment">//第一块板子的位置设定</span></span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="keyword">begin</span>                        </span><br><span class="line">                push &lt;= push-<span class="number">1'b1</span>;                                     </span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">         <span class="keyword">if</span>(push1 == <span class="number">0</span>)</span><br><span class="line">                <span class="keyword">begin</span></span><br><span class="line">                     push1 &lt;= <span class="number">640</span>;</span><br><span class="line">                     rand1 &lt;=<span class="keyword">type</span>; <span class="comment">//第二块板子的位置设定</span></span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                <span class="keyword">begin</span>                        </span><br><span class="line">                    push1 &lt;= push1-<span class="number">1'b1</span>;                                     </span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">if</span>(push2 == <span class="number">0</span>)</span><br><span class="line">                    <span class="keyword">begin</span></span><br><span class="line">                         push2 &lt;= <span class="number">640</span>;</span><br><span class="line">                         rand2 &lt;=<span class="keyword">type</span>; <span class="comment">//第三块板子的位置设定</span></span><br><span class="line">                    <span class="keyword">end</span></span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                    <span class="keyword">begin</span>                        </span><br><span class="line">                        push2&lt;= push2-<span class="number">1'b1</span>;                                     </span><br><span class="line">                    <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">if</span>(push3 == <span class="number">0</span>)</span><br><span class="line">                        <span class="keyword">begin</span></span><br><span class="line">                             push3 &lt;= <span class="number">640</span>;</span><br><span class="line">                             rand3 &lt;=<span class="keyword">type</span>; </span><br><span class="line">                          <span class="comment">//第四块板子的位置设定</span></span><br><span class="line">                        <span class="keyword">end</span></span><br><span class="line">                    <span class="keyword">else</span></span><br><span class="line">                        <span class="keyword">begin</span>                        </span><br><span class="line">                            push3 &lt;= push3-<span class="number">1'b1</span>;                                     </span><br><span class="line">                        <span class="keyword">end</span>        </span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">        push &lt;= push;</span><br><span class="line">        push1 &lt;= push1;</span><br><span class="line">        push2 &lt;= push2;</span><br><span class="line">        push3 &lt;= push3;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">wire</span> die1,die2,die3,die4;</span><br><span class="line"><span class="comment">//游戏失败定义，方块与挡板"碰撞"</span></span><br><span class="line"><span class="comment">//失败情况讨论，共设置四块挡板，四种情况</span></span><br><span class="line"><span class="keyword">assign</span> die1=((<span class="keyword">rand</span>&lt;move_y + border)&amp;&amp;(move_y &lt; <span class="keyword">rand</span>+long)&amp;&amp;(push &lt; move_x+border) &amp;&amp; (move_x &lt; push + ban ));</span><br><span class="line"><span class="keyword">assign</span> die2=((rand1&lt;move_y + border)&amp;&amp;(move_y &lt; rand1+long)&amp;&amp;(push1 &lt; move_x+border) &amp;&amp; (move_x &lt; push1 + ban ));</span><br><span class="line"><span class="keyword">assign</span> die3=((rand2&lt;move_y + border)&amp;&amp;(move_y &lt; rand2+long)&amp;&amp;(push2 &lt; move_x+border) &amp;&amp; (move_x &lt; push2 + ban ));</span><br><span class="line"><span class="keyword">assign</span> die4=((rand3&lt;move_y + border)&amp;&amp;(move_y &lt; rand3+long)&amp;&amp;(push3 &lt; move_x+border) &amp;&amp; (move_x &lt; push3 + ban ));</span><br><span class="line"></span><br><span class="line"><span class="keyword">wire</span> false;</span><br><span class="line"><span class="keyword">assign</span> false = die1||die2||die3||die4;</span><br><span class="line"></span><br><span class="line"><span class="comment">//描述运动，“画图”</span></span><br><span class="line"><span class="keyword">always</span>@(<span class="keyword">posedge</span> vga_clk,<span class="keyword">negedge</span> reset)</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(!reset)</span><br><span class="line">        <span class="keyword">begin</span> </span><br><span class="line">            data &lt;= <span class="number">0</span>;</span><br><span class="line">            stop &lt;= <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">else</span> </span><br><span class="line">        <span class="keyword">begin</span> </span><br><span class="line">           <span class="keyword">if</span> (hc&gt;move_x &amp;&amp;(hc&lt;(move_x+border)&amp;&amp;(vc&gt;move_y)&amp;&amp;(vc&lt;move_y+border))) <span class="comment">//小方块</span></span><br><span class="line">               <span class="keyword">begin</span></span><br><span class="line">                   <span class="keyword">if</span>(!false)</span><br><span class="line">                        <span class="keyword">begin</span></span><br><span class="line">                            data &lt;= <span class="number">3'h3</span>; <span class="comment">//黄色</span></span><br><span class="line">                            stop &lt;= <span class="number">0</span>;</span><br><span class="line">                        <span class="keyword">end</span></span><br><span class="line">                   <span class="keyword">else</span></span><br><span class="line">                        <span class="keyword">begin</span></span><br><span class="line">                            data &lt;= <span class="number">3'h1</span>; <span class="comment">//红色</span></span><br><span class="line">                            stop &lt;=<span class="number">1</span>;</span><br><span class="line">                        <span class="keyword">end</span></span><br><span class="line">                <span class="keyword">end</span>   </span><br><span class="line">          <span class="keyword">else</span></span><br><span class="line">                <span class="keyword">if</span> ((hc&gt;push) &amp;&amp; (hc&lt;=push+ban) &amp;&amp; (vc&gt;=<span class="keyword">rand</span>) &amp;&amp; (vc&lt;=<span class="keyword">rand</span>+long))</span><br><span class="line">                     <span class="keyword">begin</span></span><br><span class="line">                         data &lt;= <span class="number">3'h2</span>;  <span class="comment">//第一根横条</span></span><br><span class="line">                     <span class="keyword">end</span>      </span><br><span class="line">                <span class="keyword">else</span>  <span class="keyword">if</span> ((hc&gt;push1) &amp;&amp; (hc&lt;=push1+ban) &amp;&amp; (vc&gt;=rand1) &amp;&amp; (vc&lt;=rand1+long))</span><br><span class="line">                        <span class="keyword">begin</span></span><br><span class="line">                           data &lt;= <span class="number">3'h2</span>;  <span class="comment">//第二根横条</span></span><br><span class="line">                        <span class="keyword">end</span> </span><br><span class="line">                 <span class="keyword">else</span>  <span class="keyword">if</span> ((hc&gt;push2) &amp;&amp; (hc&lt;=push2+ban) &amp;&amp; (vc&gt;=rand2) &amp;&amp; (vc&lt;=rand2+long))</span><br><span class="line">                             <span class="keyword">begin</span></span><br><span class="line">                                data &lt;= <span class="number">3'h2</span>;  <span class="comment">//第三根横条</span></span><br><span class="line">                             <span class="keyword">end</span> </span><br><span class="line">                          <span class="keyword">else</span>  <span class="keyword">if</span> ((hc&gt;push3) &amp;&amp; (hc&lt;=push3+ban) &amp;&amp; (vc&gt;=rand3) &amp;&amp; (vc&lt;=rand3+long))</span><br><span class="line">                                  <span class="keyword">begin</span></span><br><span class="line">                                   data &lt;= <span class="number">3'h2</span>;  <span class="comment">//第四根横条</span></span><br><span class="line">                                  <span class="keyword">end</span>                                                       <span class="keyword">else</span></span><br><span class="line">                                     data &lt;= <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">///////       方块移动控制       ////////////</span></span><br><span class="line">	<span class="keyword">always</span>@(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> reset)</span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span> (!reset)</span><br><span class="line">            <span class="keyword">begin</span></span><br><span class="line">               move_y &lt;= <span class="number">240</span>;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (up_key_press)</span><br><span class="line">        <span class="keyword">begin</span></span><br><span class="line">            <span class="keyword">if</span>(move_y == <span class="number">0</span>)</span><br><span class="line">                <span class="keyword">begin</span></span><br><span class="line">                     move_y &lt;= move_y;</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                <span class="keyword">begin</span>                        </span><br><span class="line">                    move_y &lt;= move_y-<span class="number">1'b1</span>;                                          </span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">      <span class="keyword">else</span> <span class="keyword">if</span> (down_key_press)</span><br><span class="line">            <span class="keyword">begin</span></span><br><span class="line">                <span class="keyword">if</span>(move_y&gt;<span class="number">440</span>)</span><br><span class="line">                <span class="keyword">begin</span></span><br><span class="line">                     move_y &lt;= move_y;</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                 <span class="keyword">begin</span>    </span><br><span class="line">                    move_y &lt;= move_y+<span class="number">1'b1</span>;    </span><br><span class="line">                 <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">end</span> </span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="comment">// 信号输出</span></span><br><span class="line"><span class="keyword">assign</span> disp_RGB = (dat_act) ? data : <span class="number">3'h00</span>;</span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure><br><br></div>
+
+<h2 id="TOP模块"><a href="#TOP模块" class="headerlink" title="TOP模块"></a>TOP模块</h2><p><button class="testButton" onclick="document.all.child4.style.display=(document.all.child4.style.display =='none')?'':'none'">点击显\隐代码</button></p>
+<div id="child4" style="display:"><br><br><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> top(clk,reset,up,hsync,vsync,disp_RGB);</span><br><span class="line"><span class="keyword">input</span> clk;</span><br><span class="line"><span class="keyword">input</span> reset;</span><br><span class="line"><span class="keyword">input</span> up;</span><br><span class="line"></span><br><span class="line"><span class="keyword">output</span> hsync; <span class="comment">//VGA 行同步信号</span></span><br><span class="line"><span class="keyword">output</span> vsync; <span class="comment">//VGA 场同步信号</span></span><br><span class="line"><span class="keyword">output</span> [<span class="number">2</span>:<span class="number">0</span>]disp_RGB; <span class="comment">//VGA 数据输出</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">wire</span> dat_act;</span><br><span class="line"><span class="keyword">wire</span> up_key_press;</span><br><span class="line"><span class="keyword">wire</span> down_key_press;</span><br><span class="line"><span class="keyword">wire</span> [<span class="number">9</span>:<span class="number">0</span>]hc,vc;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">key U1(clk,reset,up,up_key_press,down_key_press);</span><br><span class="line">control U2( clk,reset, disp_RGB,hc,vc,dat_act,up_key_press,down_key_press );</span><br><span class="line">vga  U3( clk,reset,hsync, vsync,hc,vc,dat_act);</span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure><br><br></div>
+
+<h1 id="写在后面的话"><a href="#写在后面的话" class="headerlink" title="写在后面的话"></a>写在后面的话</h1><p>关于这个小游戏的讲解就到这里，有任何疑问可以在评论处指出或者联系我，我会及时更新，文章若有错误，恳请读者在评论区指出斧正，我会修改。</p>
+<p>欢迎大家在评论区与我交流，学习。</p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/搞硬件/">搞硬件</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FPGA/">FPGA</a></li></ul>
+
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTM3NS83OTM4">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/11/22/FPGA-数字闹钟/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">FPGA.数字闹钟</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#游戏介绍"><span class="nav-number">1.</span> <span class="nav-text">游戏介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#游戏规则"><span class="nav-number">1.1.</span> <span class="nav-text">游戏规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#游戏要求"><span class="nav-number">1.2.</span> <span class="nav-text">游戏要求</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#设计分析"><span class="nav-number">2.</span> <span class="nav-text">设计分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#模块设定"><span class="nav-number">2.1.</span> <span class="nav-text">模块设定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#键盘模块"><span class="nav-number">2.2.</span> <span class="nav-text">键盘模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VGA模块"><span class="nav-number">2.3.</span> <span class="nav-text">VGA模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#控制模块"><span class="nav-number">2.4.</span> <span class="nav-text">控制模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总体的设计图"><span class="nav-number">2.5.</span> <span class="nav-text">总体的设计图</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#方案设计"><span class="nav-number">3.</span> <span class="nav-text">方案设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#键盘模块-1"><span class="nav-number">3.1.</span> <span class="nav-text">键盘模块</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#消抖"><span class="nav-number">3.1.1.</span> <span class="nav-text">消抖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#控制移动"><span class="nav-number">3.1.2.</span> <span class="nav-text">控制移动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VGA模块-1"><span class="nav-number">3.2.</span> <span class="nav-text">VGA模块</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#VGA原理"><span class="nav-number">3.2.1.</span> <span class="nav-text">VGA原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#控制模块-1"><span class="nav-number">3.3.</span> <span class="nav-text">控制模块</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#长脉冲变多个短脉冲"><span class="nav-number">3.3.1.</span> <span class="nav-text">长脉冲变多个短脉冲</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#“画”方块和挡板"><span class="nav-number">3.3.2.</span> <span class="nav-text">“画”方块和挡板</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#产生随机数"><span class="nav-number">3.3.3.</span> <span class="nav-text">产生随机数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#游戏失败设置"><span class="nav-number">3.3.4.</span> <span class="nav-text">游戏失败设置</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码展示"><span class="nav-number">4.</span> <span class="nav-text">代码展示</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#键盘模块-2"><span class="nav-number">4.1.</span> <span class="nav-text">键盘模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VGA模块-2"><span class="nav-number">4.2.</span> <span class="nav-text">VGA模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#控制模块-2"><span class="nav-number">4.3.</span> <span class="nav-text">控制模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TOP模块"><span class="nav-number">4.4.</span> <span class="nav-text">TOP模块</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#写在后面的话"><span class="nav-number">5.</span> <span class="nav-text">写在后面的话</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+    <a href="/guestbook" class="mobile-nav-link">guestbook</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2018 luheng&#39;s blog All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script>
+</body>
+</html>

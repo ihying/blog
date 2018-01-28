@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>FPGA.矩阵键盘 | luheng&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="FPGA" />
+  
+  
+  
+  
+  <meta name="description" content="矩阵键盘是外部设备中所使用的排布类似于矩阵的键盘组。矩阵式结构的键盘显然比直接法要复杂一些，识别也要复杂一些，列线通过电阻接正电源，并将行线所接的芯片的I/O口作为输出端，而列线所接的I/O口则作为输入。 本文简单的讲诉下矩阵键盘的扫描原理，给出相应的代码和测试文件。">
+<meta name="keywords" content="FPGA">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FPGA.矩阵键盘">
+<meta property="og:url" content="http://www.luheng.online/2017/11/03/FPGA.矩阵键盘/index.html">
+<meta property="og:site_name" content="luheng&#39;s blog">
+<meta property="og:description" content="矩阵键盘是外部设备中所使用的排布类似于矩阵的键盘组。矩阵式结构的键盘显然比直接法要复杂一些，识别也要复杂一些，列线通过电阻接正电源，并将行线所接的芯片的I/O口作为输出端，而列线所接的I/O口则作为输入。 本文简单的讲诉下矩阵键盘的扫描原理，给出相应的代码和测试文件。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/key_scan/1.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/key_scan/2.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/key_scan/3.jpg">
+<meta property="og:updated_time" content="2018-01-08T02:37:53.527Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="FPGA.矩阵键盘">
+<meta name="twitter:description" content="矩阵键盘是外部设备中所使用的排布类似于矩阵的键盘组。矩阵式结构的键盘显然比直接法要复杂一些，识别也要复杂一些，列线通过电阻接正电源，并将行线所接的芯片的I/O口作为输出端，而列线所接的I/O口则作为输入。 本文简单的讲诉下矩阵键盘的扫描原理，给出相应的代码和测试文件。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/key_scan/1.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="luheng&#39;s blog" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+
+
+<header id="allheader" class="site-header" role="banner" 
+   >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" title="luheng&#39;s blog" rel="home"> luheng&#39;s blog </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">首页</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">归档</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">分类</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">标签</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">关于</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/guestbook">留言</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-FPGA.矩阵键盘" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      FPGA.矩阵键盘
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2017/11/03/FPGA.矩阵键盘/" class="article-date">
+	  <time datetime="2017-11-03T03:50:27.000Z" itemprop="datePublished">十一月 3, 2017</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/搞硬件/">搞硬件</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>矩阵键盘是外部设备中所使用的排布类似于矩阵的键盘组。矩阵式结构的键盘显然比直接法要复杂一些，识别也要复杂一些，列线通过电阻接正电源，并将行线所接的芯片的I/O口作为输出端，而列线所接的I/O口则作为输入。</p>
+<p>本文简单的讲诉下矩阵键盘的扫描原理，给出相应的代码和测试文件。<br><a id="more"></a><br>矩阵键盘是常用的输入设备，由于相较于传统的单个按键，它能很好的节省宝贵的I/O接口。怎么节省的呢？下面以4x4矩阵键盘举例说明原因。</p>
+<h3 id="原理解释"><a href="#原理解释" class="headerlink" title="原理解释"></a>原理解释</h3><p>首先说明，FPGA中我们常说的写矩阵键盘，其实是在书写判断键盘输入是哪一个按键的，并译码输出相应数据的芯片，是一个芯片。键盘就是键盘，我们不可能把它“写”出来。</p>
+<p><img src="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/key_scan/1.jpg" alt="键盘整体图示"></p>
+<p>我们写的就是左边的芯片，那该怎么书写？我们需要先弄清楚矩阵键盘的工作原理，看下图，通过图片理解比较直观点。</p>
+<p><img src="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/key_scan/2.jpg" alt="键盘电路"></p>
+<p>从上图我们可以看出，对于4x4矩阵键盘来说，它是四输出，四输入。</p>
+<p>而且键盘的输出即芯片的输入，键盘的输入即芯片的输出，有点拗口，不过看图还是不难理解的。</p>
+<p>为了方便讲解，我先设定一些值，说明原理时比较好说明。<br>设输入的四根线，也就是行，设为[3:0]col；<br>输出的四根线，也就是列，设为[3:0]row；<br>将它们组合一下，行列就能决定一个点 设键值 row_col = {row,col}。</p>
+<p>我们设定一个初始状态，对于芯片来说，输出[3:0]col是能控制的，那没有按键按下时，我让它都是 0 就好了，为什么不是 1，因为键盘的另一端，是高电平，不能和它一样啊，不然键盘按下的时候，反馈给芯片的输入就没有变化了。当你读到这或许还不能理解这一点，不过没关系，我尽力去解释清楚。</p>
+<p>看键盘的四输入[3:0]col ， 四输出[3:0]row。<br>假如没有按键按下时，芯片给的四个输出都是0，输入的按键由于外部连的高电平的作用，给芯片的输入都是1，本来呢，要是你有按键按下，就能把0接到输入，输入也就不用全是1了，但是你没有， 所以在没有按键按下时，芯片中的数据 row_col = 1111_0000。</p>
+<p>要是现在想按了，而且还按了，就是下面这个键。会发生什么呢？</p>
+<p><img src="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/key_scan/3.jpg" alt="键盘电路"></p>
+<p>由于按下了，也就是接通了按键左边的0 ，那么反馈回去的数据就变成了 row_col=1101_0000,令前面的1111 ，变成了1101的“凶手”，肯定是你后面四个0的某一个造成的。<br>但对于芯片来说我是不知道你是哪个 0 造成的，也就是说目前芯片知道了是哪一列，但哪一行不知道。为了找出是那一个0，我让芯片的四个输出，也就是四行，只有一个是0，一个个排查，也就是键盘行扫描。</p>
+<p>先从1110开始，1111不变成1101，那就换一行变成1101试试，不行再变，变成1011，直到找到使芯片输入变成了1011的那一行，这样行，列都知道了就能确定一个点。显然，我按下的那个键 row_col = 1101_1101。</p>
+<p>按键消抖这部分，在这里不属于重点，不多解释了，主要就是个延时，在程序中也不难看懂。</p>
+<p>具体的操作看代码吧。</p>
+<h3 id="源程序"><a href="#源程序" class="headerlink" title="源程序"></a>源程序</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br></pre></td><td class="code"><pre><span class="line">`timescale 1ns / 1ps</span><br><span class="line">module key_scan(</span><br><span class="line">    input clk,    </span><br><span class="line">    input rst_n, //系统复位</span><br><span class="line">    input [3:0]row, //FPGA输入，行</span><br><span class="line">    output reg flag, //输出值有效标志位</span><br><span class="line">    output reg [3:0] data , //按键值</span><br><span class="line">    output reg [3:0] y,//根据按键功能给出相应功能</span><br><span class="line">    output reg [3:0]col //FPGA 输出 ，列</span><br><span class="line">    );</span><br><span class="line">    </span><br><span class="line">    ///////////////////////////////////</span><br><span class="line">    //           分频电路           //</span><br><span class="line">    /////////////////////////////////    </span><br><span class="line">    //当然需不需要分频，看你具体需求了，但这里给出代码</span><br><span class="line">    reg clk_1k;//1k Hz的时钟</span><br><span class="line">    reg [20:0] count; //计数器</span><br><span class="line">    parameter T1k = 10;//这个分频为了方便仿真，随意定了个较小的值，10分分频</span><br><span class="line">    </span><br><span class="line">    always @(posedge clk or negedge rst_n)</span><br><span class="line">    begin</span><br><span class="line">        if(!rst_n)</span><br><span class="line">        begin </span><br><span class="line">            clk_1k &lt;= 1;</span><br><span class="line">            count &lt;= 0;</span><br><span class="line">        end</span><br><span class="line">        else</span><br><span class="line">           if(count &lt; T1k/2)</span><br><span class="line">               count  &lt;= count + 1;</span><br><span class="line">           else</span><br><span class="line">           begin</span><br><span class="line">               count &lt;= 0 ;</span><br><span class="line">               clk_1k &lt;= ~clk_1k;</span><br><span class="line">            end</span><br><span class="line">    end </span><br><span class="line">    ////////////////////////////////////</span><br><span class="line">    //          键盘扫描电路          //</span><br><span class="line">    ///////////////////////////////////</span><br><span class="line">    reg [4:0]cnt_time;//按键按下的时间</span><br><span class="line">    reg [1:0]state;   //状态寄存器</span><br><span class="line">    reg [7:0]row_col; //按键对应的行列值</span><br><span class="line">    </span><br><span class="line">    always @(posedge clk_1k or negedge rst_n)</span><br><span class="line">    begin</span><br><span class="line">        if(!rst_n)</span><br><span class="line">            begin</span><br><span class="line">                flag &lt;=  0;</span><br><span class="line">                state &lt;= 0;</span><br><span class="line">                cnt_time &lt;= 0;</span><br><span class="line">                row_col &lt;= 0;</span><br><span class="line">                col &lt;= 4&apos;b0_000;</span><br><span class="line">            end </span><br><span class="line">        else</span><br><span class="line">            begin</span><br><span class="line">            case(state)</span><br><span class="line">            // 状态 0 是判断是否有按键按下，如果有，开始列扫描</span><br><span class="line">            0 : begin</span><br><span class="line">                    if(row != 4&apos;b1111) //检测是否有按键按下，row是输入的。</span><br><span class="line">                    begin </span><br><span class="line">                        if(cnt_time &lt; 5) //按键时间大于一定的值，认为确实是按下了</span><br><span class="line">                            cnt_time &lt;= cnt_time + 1;</span><br><span class="line">                        else</span><br><span class="line">                            begin </span><br><span class="line">                                cnt_time &lt;= 0;</span><br><span class="line">                                state &lt;=1;      </span><br><span class="line">                                col &lt;= 4&apos;b1110; //行扫描的初始值</span><br><span class="line">                             end</span><br><span class="line">                    end</span><br><span class="line">                    else</span><br><span class="line">                        cnt_time = 0;</span><br><span class="line">                 end</span><br><span class="line">     </span><br><span class="line">        //状态 0 是对列进行逐列扫描</span><br><span class="line">            1:begin</span><br><span class="line">                  if(row != 4&apos;b1111) </span><br><span class="line">                      begin</span><br><span class="line">                        row_col &lt;= &#123;row,col&#125;;//键值的行列记录下来</span><br><span class="line">                        flag &lt;= 1 ; //拉高有效标志位，确定扫描点</span><br><span class="line">                        state &lt;= 2; </span><br><span class="line">                        col &lt;= 4&apos;b0_000;//回到没有按下的状态</span><br><span class="line">                      end</span><br><span class="line">                   else</span><br><span class="line">                       begin</span><br><span class="line">                        col &lt;= &#123;col[2:0],col[3]&#125;;</span><br><span class="line">                        end</span><br><span class="line">           //不是初始按键的列 1110，换一列，变为1101,相当于一个循环移位                        </span><br><span class="line">                end</span><br><span class="line">                </span><br><span class="line">        //状态 2 检测按键是否被释放，如果被释放，回到初始状态</span><br><span class="line">            2:begin</span><br><span class="line">                if(row == 4&apos;b1111)</span><br><span class="line">                    begin</span><br><span class="line">                        if(cnt_time &lt; 5)    </span><br><span class="line">                            begin</span><br><span class="line">                                cnt_time &lt;= cnt_time + 1;</span><br><span class="line">                             end</span><br><span class="line">                        else</span><br><span class="line">                            begin</span><br><span class="line">                                cnt_time &lt;= 0;</span><br><span class="line">                                state &lt;= 0;</span><br><span class="line">                                col &lt;= 4&apos;b000;</span><br><span class="line">                             end</span><br><span class="line">                    end</span><br><span class="line">                 else</span><br><span class="line">                    begin</span><br><span class="line">                        cnt_time &lt;=0;</span><br><span class="line">                        flag &lt;= 0;</span><br><span class="line">                    end</span><br><span class="line">                end   </span><br><span class="line">          </span><br><span class="line">          default : state &lt;= 0;  </span><br><span class="line">          endcase</span><br><span class="line">          end   </span><br><span class="line">    end   </span><br><span class="line">      //////////////////////////////////</span><br><span class="line">      //            编码             //         </span><br><span class="line">    /////////////////////////////////</span><br><span class="line">    always @(*)</span><br><span class="line">        begin</span><br><span class="line">            if(!rst_n)</span><br><span class="line">                begin</span><br><span class="line">                    data = 0;</span><br><span class="line">                end</span><br><span class="line">            else</span><br><span class="line">                begin</span><br><span class="line">                    case(row_col)</span><br><span class="line">                    8&apos;b1110_1110:  data = 0;</span><br><span class="line">                    8&apos;b1110_1101:  data = 1;</span><br><span class="line">                    8&apos;b1110_1011:  data = 2;</span><br><span class="line">                    8&apos;b1110_0111:  data = 3;</span><br><span class="line">                    </span><br><span class="line">                    8&apos;b1101_1110:  data = 4;</span><br><span class="line">                    8&apos;b1101_1101:  data = 5;</span><br><span class="line">                    8&apos;b1101_1011:  data = 6;</span><br><span class="line">                    8&apos;b1101_0111:  data = 7;</span><br><span class="line">                    </span><br><span class="line">                    8&apos;b1011_1110:  data = 8;</span><br><span class="line">                    8&apos;b1011_1101:  data = 9;</span><br><span class="line">                    8&apos;b1011_1011:  data = 10;</span><br><span class="line">                    8&apos;b1011_0111:  data = 11;</span><br><span class="line">                    </span><br><span class="line">                    8&apos;b0111_1110:  data = 12;</span><br><span class="line">                    8&apos;b0111_1101:  data = 13;</span><br><span class="line">                    8&apos;b0111_1011:  data = 14;</span><br><span class="line">                    8&apos;b0111_0111:  data = 15;</span><br><span class="line">                    default: data = 16;</span><br><span class="line">                    endcase</span><br><span class="line">                end</span><br><span class="line">           end</span><br><span class="line">        //////////////////////////////////</span><br><span class="line">        //            译码             //         </span><br><span class="line">       /////////////////////////////////</span><br><span class="line">       //对按键译码就是把按键的功能安排好，我随便把它变为数字的16进制了</span><br><span class="line">    always @(*)</span><br><span class="line">           begin</span><br><span class="line">               if(!rst_n)</span><br><span class="line">                   begin</span><br><span class="line">                       data = 0;</span><br><span class="line">                   end</span><br><span class="line">               else</span><br><span class="line">                   begin</span><br><span class="line">                       case(data)</span><br><span class="line">                       0: y=4&apos;b0_000;</span><br><span class="line">                       1: y=4&apos;b0_001;</span><br><span class="line">                       2: y=4&apos;b0_010;</span><br><span class="line">                       3: y=4&apos;b0_011;</span><br><span class="line">                       </span><br><span class="line">                       4: y=4&apos;b0_101;</span><br><span class="line">                       5: y=4&apos;b0_101;</span><br><span class="line">                       6: y=4&apos;b0_110;</span><br><span class="line">                       7: y=4&apos;b0_111;</span><br><span class="line">                      </span><br><span class="line">                       8:  y=4&apos;b1_000;</span><br><span class="line">                       9:  y=4&apos;b1_001;</span><br><span class="line">                       10: y=4&apos;b1_010;</span><br><span class="line">                       11: y=4&apos;b1_011;</span><br><span class="line">                       </span><br><span class="line">                       12: y=4&apos;b1_100;</span><br><span class="line">                       13: y=4&apos;b1_101;</span><br><span class="line">                       14: y=4&apos;b1_110;</span><br><span class="line">                       15: y=4&apos;b1_111;</span><br><span class="line">                       default: y=4&apos;b0_000;</span><br><span class="line">                       endcase</span><br><span class="line">                   end</span><br><span class="line">              end      </span><br><span class="line">   //译码电路，当个例子，实际情况请根据自身需要修改。</span><br><span class="line">endmodule</span><br></pre></td></tr></table></figure>
+<h3 id="tb测试文件"><a href="#tb测试文件" class="headerlink" title="tb测试文件"></a>tb测试文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><span class="line">module tb_keyscan;</span><br><span class="line">    reg clk;</span><br><span class="line">    reg rst_n;</span><br><span class="line">    reg [3:0]row;</span><br><span class="line">    </span><br><span class="line">    wire flag;</span><br><span class="line">    wire [3:0]data;</span><br><span class="line">    wire [3:0]y;</span><br><span class="line">    wire [3:0]col;</span><br><span class="line">    </span><br><span class="line">    //例化</span><br><span class="line">    key_scan uut(</span><br><span class="line">        .clk(clk),.rst_n(rst_n),.row(row),</span><br><span class="line">        .flag(flag),.data(data),.y(y),.col(col)</span><br><span class="line">        );</span><br><span class="line">        </span><br><span class="line">    initial</span><br><span class="line">    begin</span><br><span class="line">        clk = 0;</span><br><span class="line">        rst_n = 0;</span><br><span class="line">        #10;</span><br><span class="line">        rst_n = 1; //先复位一段时间再启动</span><br><span class="line">    end</span><br><span class="line">    </span><br><span class="line">     always #10 clk=~clk; //50M时钟信息</span><br><span class="line">     </span><br><span class="line">     reg [4:0]pnumber; //按键值</span><br><span class="line">     initial</span><br><span class="line">        begin</span><br><span class="line">            pnumber = 16;//无按键按下</span><br><span class="line">            #10 pnumber = 1;</span><br><span class="line">            #10 pnumber = 16;  //模拟抖动</span><br><span class="line">            #10 pnumber = 1;</span><br><span class="line">            #10 pnumber = 16;</span><br><span class="line">            #10 pnumber = 1;</span><br><span class="line">            #10 pnumber = 16;</span><br><span class="line">            #10 pnumber = 1;</span><br><span class="line">            #10 pnumber = 16;</span><br><span class="line">            #10 pnumber = 1;</span><br><span class="line">            #10;</span><br><span class="line">            </span><br><span class="line">            pnumber = 1;//按键 1 按下</span><br><span class="line">            #2500 pnumber = 16;  //模拟释放时的抖动</span><br><span class="line">            #10 pnumber = 1;</span><br><span class="line">            #10 pnumber = 16;</span><br><span class="line">            #10 pnumber = 1;</span><br><span class="line">            #10 pnumber = 16;</span><br><span class="line">            #10 pnumber = 1;</span><br><span class="line">            #10 pnumber = 16; </span><br><span class="line">            #2000; //松开</span><br><span class="line">            </span><br><span class="line">            pnumber = 2;//按键 2 按下</span><br><span class="line">            #2500 pnumber = 16;  //模拟释放时的抖动</span><br><span class="line">            #10 pnumber = 1;</span><br><span class="line">            #10 pnumber = 16;</span><br><span class="line">            #10 pnumber = 1;</span><br><span class="line">            #10 pnumber = 16;</span><br><span class="line">            #10 pnumber = 1;</span><br><span class="line">            #10 pnumber = 16; </span><br><span class="line">            #2000; //松开</span><br><span class="line">            </span><br><span class="line">            pnumber = 3;//按键 3 按下</span><br><span class="line">            #2500 pnumber = 16;  //模拟释放时的抖动</span><br><span class="line">            #10 pnumber = 1;</span><br><span class="line">            #10 pnumber = 16;</span><br><span class="line">            #10 pnumber = 1;</span><br><span class="line">            #10 pnumber = 16;</span><br><span class="line">            #10 pnumber = 1;</span><br><span class="line">            #10 pnumber = 16; </span><br><span class="line">            #2000; //松开</span><br><span class="line">        end</span><br><span class="line"></span><br><span class="line">        always @(*)</span><br><span class="line">        begin</span><br><span class="line">          case(pnumber)</span><br><span class="line">          0:    row = &#123;1&apos;b1,1&apos;b1,1&apos;b1,col[0]&#125;;</span><br><span class="line">          1:    row = &#123;1&apos;b1,1&apos;b1,1&apos;b1,col[1]&#125;;</span><br><span class="line">          2:    row = &#123;1&apos;b1,1&apos;b1,1&apos;b1,col[2]&#125;; </span><br><span class="line">          3:    row = &#123;1&apos;b1,1&apos;b1,1&apos;b1,col[3]&#125;;</span><br><span class="line">          </span><br><span class="line">          4:    row = &#123;1&apos;b1,1&apos;b1,col[0],1&apos;b1&#125;;</span><br><span class="line">          5:    row = &#123;1&apos;b1,1&apos;b1,col[1],1&apos;b1&#125;;</span><br><span class="line">          6:    row = &#123;1&apos;b1,1&apos;b1,col[2],1&apos;b1&#125;;</span><br><span class="line">          7:    row = &#123;1&apos;b1,1&apos;b1,col[3],1&apos;b1&#125;;</span><br><span class="line">          </span><br><span class="line">          8:    row = &#123;1&apos;b1,col[0],1&apos;b1,1&apos;b1&#125;;</span><br><span class="line">          9:    row = &#123;1&apos;b1,col[1],1&apos;b1,1&apos;b1&#125;;</span><br><span class="line">          10:    row = &#123;1&apos;b1,col[2],1&apos;b1,1&apos;b1&#125;;</span><br><span class="line">          11:    row = &#123;1&apos;b1,col[3],1&apos;b1,1&apos;b1&#125;;</span><br><span class="line">          </span><br><span class="line">          12:    row = &#123;col[0],1&apos;b1,1&apos;b1,1&apos;b1&#125;;</span><br><span class="line">          13:    row = &#123;col[1],1&apos;b1,1&apos;b1,1&apos;b1&#125;;</span><br><span class="line">          14:    row = &#123;col[2],1&apos;b1,1&apos;b1,1&apos;b1&#125;;</span><br><span class="line">          15:    row = &#123;col[3],1&apos;b1,1&apos;b1,1&apos;b1&#125;;</span><br><span class="line">          </span><br><span class="line">          16:    row = 4&apos;b1111;</span><br><span class="line">          default : row = 4&apos;b1111;</span><br><span class="line">          endcase</span><br><span class="line">        end</span><br><span class="line">        </span><br><span class="line">endmodule</span><br></pre></td></tr></table></figure>
+<p>代码的写法有很多，各有优劣，我这也只是给出我的想法，有错误请斧正，欢迎大家在评论区与我交流，打赏就更好了。</p>
+<p>本文完。</p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/搞硬件/">搞硬件</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FPGA/">FPGA</a></li></ul>
+
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTM3NS83OTM4">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/11/09/matlab实现快速傅里叶变换/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          matlab实现快速傅里叶变换
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/10/27/FPGA.赋值语句/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">FPGA.赋值语句</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理解释"><span class="nav-number">1.</span> <span class="nav-text">原理解释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#源程序"><span class="nav-number">2.</span> <span class="nav-text">源程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tb测试文件"><span class="nav-number">3.</span> <span class="nav-text">tb测试文件</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+    <a href="/guestbook" class="mobile-nav-link">guestbook</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2018 luheng&#39;s blog All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script>
+</body>
+</html>

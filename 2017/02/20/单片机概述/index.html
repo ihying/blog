@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>单片机概述 | luheng&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="mcu，单片机" />
+  
+  
+  
+  
+  <meta name="description" content="现在写作的笔者正在读大二，关于单片机，由于专业相关，我无可避免的与之相遇了，期待这是一场美丽的邂逅。所谓工欲善其事，必先利其器，来来回回看了不少东西，写点东西记录自己所学的知识，后期还会有更多相关的文章。嗯，就这样。">
+<meta name="keywords" content="mcu，单片机">
+<meta property="og:type" content="article">
+<meta property="og:title" content="单片机概述">
+<meta property="og:url" content="http://www.luheng.online/2017/02/20/单片机概述/index.html">
+<meta property="og:site_name" content="luheng&#39;s blog">
+<meta property="og:description" content="现在写作的笔者正在读大二，关于单片机，由于专业相关，我无可避免的与之相遇了，期待这是一场美丽的邂逅。所谓工欲善其事，必先利其器，来来回回看了不少东西，写点东西记录自己所学的知识，后期还会有更多相关的文章。嗯，就这样。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/%E5%8D%95%E7%89%87%E6%9C%BA%EF%BC%881%EF%BC%89.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/%E5%8D%95%E7%89%87%E6%9C%BA%EF%BC%882%EF%BC%89.jpg">
+<meta property="og:updated_time" content="2017-12-30T11:42:26.326Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="单片机概述">
+<meta name="twitter:description" content="现在写作的笔者正在读大二，关于单片机，由于专业相关，我无可避免的与之相遇了，期待这是一场美丽的邂逅。所谓工欲善其事，必先利其器，来来回回看了不少东西，写点东西记录自己所学的知识，后期还会有更多相关的文章。嗯，就这样。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/sirlh/photo/master/%E5%8D%95%E7%89%87%E6%9C%BA%EF%BC%881%EF%BC%89.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="luheng&#39;s blog" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+
+
+<header id="allheader" class="site-header" role="banner" 
+   >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" title="luheng&#39;s blog" rel="home"> luheng&#39;s blog </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">首页</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">归档</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">分类</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">标签</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">关于</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/guestbook">留言</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-单片机概述" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      单片机概述
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2017/02/20/单片机概述/" class="article-date">
+	  <time datetime="2017-02-20T08:17:36.000Z" itemprop="datePublished">二月 20, 2017</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/搞硬件/">搞硬件</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>现在写作的笔者正在读大二，关于单片机，由于专业相关，我无可避免的与之相遇了，期待这是一场美丽的邂逅。所谓工欲善其事，必先利其器，来来回回看了不少东西，写点东西记录自己所学的知识，后期还会有更多相关的文章。嗯，就这样。<br><a id="more"></a><br>欢迎大家在评论区与我交流，如有错误，欢迎斧正。</p>
+<h3 id="什么是单片机"><a href="#什么是单片机" class="headerlink" title="什么是单片机"></a>什么是单片机</h3><p>既然要学习它，肯定要了解它。</p>
+<p>专业语言上讲：</p>
+<blockquote>
+<p>单片机，全称单片微型计算机（英语：single-chip microcomputer），又称微控制器（microcontroller），是把中央处理器、存储器、定时/计数器（timer/counter）、各种输入输出接口等都集成在一块集成电路芯片上的微型计算机。（来源：维基百科）</p>
+</blockquote>
+<p>笔者首次看完这一段话的第一感受就是，这…好厉害的样子，然而表示依旧一脸懵逼，什么中央处理器、存储器、定时/计数器都不是很懂啦，这都什么鬼啊。相信初学者很多也会有这些问题，后面会写一些相关得博客去介绍计算机结构，这里不展开解释。其实，由于我们是使用者，所以我们只需知道它是块集成芯片，要使用编程的方式控制这块芯片的引脚，让它在不同的时间段内输出不同的电平，继而控制与引脚相连的外围电路，局限于使用，相信是足够的，就像用一样东西，能看懂它的说明书（数据手册），了解它是如何工作得就能使用了。关于单片机个人觉得在于看懂数据手册会使用是关键，至于它的内部原理有一定了解即可，这真不是我懒，因为复杂的芯片逻辑门数可能达到几万，甚至几十万、几百万，要了解内部结构再使用的话，会崩溃的。</p>
+<p>单片机的最大优点是体积小，可放在仪表内部，但存储量小，输入输出接口简单，功能较低。由于其发展非常迅速，旧的单片机的定义已不能满足，所以在很多应用场合被称为范围更广的微控制器；由于单片机微电脑常用于当控制器故又名single chip microcontroller。此外，单芯片是台湾对单片机的称呼；中国大陆主要采用“单片机”的称呼，英文缩写为MCU。</p>
+<h3 id="单片机长什么样"><a href="#单片机长什么样" class="headerlink" title="单片机长什么样"></a>单片机长什么样</h3><p>现在来瞅瞅…</p>
+<p>它的样子是酱样<br><img src="https://raw.githubusercontent.com/sirlh/photo/master/%E5%8D%95%E7%89%87%E6%9C%BA%EF%BC%881%EF%BC%89.jpg" alt="单片机图片"><br>大多数是酱样<br><img src="https://raw.githubusercontent.com/sirlh/photo/master/%E5%8D%95%E7%89%87%E6%9C%BA%EF%BC%882%EF%BC%89.jpg" alt="单片机图片"><br>还有很多种样子，这是因为：<br>由于采用的封装方式不同，单片机有多种外表，至于封装形式，有：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">DIP(Dual In-line Package)双列直插式封装</span><br><span class="line">PLCC(Plastic Leaded Chip Carrier)带引线的塑料芯片封装</span><br><span class="line">QFP(Quad Flat Package)塑料方形扁平式封装</span><br><span class="line">PFP(Plastic Flat Package)塑料扁平式组件式封装</span><br><span class="line">PGA(Pin Grid Array package)针插网格阵列封装</span><br><span class="line">BGA(Ball Grid Array package)球栅阵列封装</span><br></pre></td></tr></table></figure></p>
+<p>每一种封装形式都有各自的特点，适用不同的场合，对此感兴趣就自行查看资料吧，这个我也不是很懂，不敢妄言。</p>
+<h3 id="单片机的用途"><a href="#单片机的用途" class="headerlink" title="单片机的用途"></a>单片机的用途</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">工业自动化。如数据采集、测控技术。</span><br><span class="line">只能仪器仪表。如数字示波器、数字信号源、数字万用表、感应电流表等。</span><br><span class="line">消费电子产品。如冰箱、空调、电视机、汽车电子设备等。</span><br><span class="line">通信方面。如调制解调器、程控交换技术、手机等。</span><br><span class="line">武器装备。导弹、鱼雷智导、智能武器等。</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>上面的说法可能过于笼统，它具体应用在哪，举个例子：电磁炉控制火候的面板下面便是集成了单片机的板子，空调的红外遥控器，电子手表…真的在生活中无处不在，只是我们不了解，不熟悉罢了。</p>
+<h3 id="相关的学习网址"><a href="#相关的学习网址" class="headerlink" title="相关的学习网址"></a>相关的学习网址</h3><p><a href="http://www.51hei.com/" target="_blank" rel="noopener">单片机教程网</a><br><a href="http://www.csdn.net/" target="_blank" rel="noopener">CSDN</a><br><a href="http://www.51zxw.net/" target="_blank" rel="noopener">我要自学网</a><br><a href="http://www.eeworld.com.cn/" target="_blank" rel="noopener">电子工程世界</a></p>
+<h3 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h3><p>单片机原理及应用 第三版（电子工业出版社）<br>新概念 51单片机C语言——入门、提高、开发、拓展全攻略（郭天祥）</p>
+<p><strong>ヽ(￣ω￣(￣ω￣〃)ゝ一起努力学习吧。</strong></p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/搞硬件/">搞硬件</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/单片机/">单片机</a></li></ul>
+
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTM3NS83OTM4">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/02/23/电热水器的构造和原理/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          电热水器的构造和原理
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/02/19/markdown的基本使用/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">markdown的基本使用</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是单片机"><span class="nav-number">1.</span> <span class="nav-text">什么是单片机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单片机长什么样"><span class="nav-number">2.</span> <span class="nav-text">单片机长什么样</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单片机的用途"><span class="nav-number">3.</span> <span class="nav-text">单片机的用途</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#相关的学习网址"><span class="nav-number">4.</span> <span class="nav-text">相关的学习网址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文献"><span class="nav-number">5.</span> <span class="nav-text">参考文献</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+    <a href="/guestbook" class="mobile-nav-link">guestbook</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2018 luheng&#39;s blog All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script>
+</body>
+</html>

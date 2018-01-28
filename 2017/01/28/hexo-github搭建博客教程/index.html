@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>hexo+github搭建博客教程 | luheng&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="hexo 博客" />
+  
+  
+  
+  
+  <meta name="description" content="前言：博主一开始想拥有一个专属域名的网站，于是便有了后来创建博客的折腾路程，此贴是用来总结下搭建博客的过程，所以写得比较细（其实是怕自己以后忘了），希望对大家搭建博客有所帮助。">
+<meta name="keywords" content="hexo 博客">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hexo+github搭建博客教程">
+<meta property="og:url" content="http://www.luheng.online/2017/01/28/hexo-github搭建博客教程/index.html">
+<meta property="og:site_name" content="luheng&#39;s blog">
+<meta property="og:description" content="前言：博主一开始想拥有一个专属域名的网站，于是便有了后来创建博客的折腾路程，此贴是用来总结下搭建博客的过程，所以写得比较细（其实是怕自己以后忘了），希望对大家搭建博客有所帮助。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/a2.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/a3.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/a1.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/a4.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/a5.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/a9.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/a6.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/a7.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/a8.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/a10.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/a11.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/a12.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/a13.jpg">
+<meta property="og:updated_time" content="2018-01-02T06:36:15.813Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="hexo+github搭建博客教程">
+<meta name="twitter:description" content="前言：博主一开始想拥有一个专属域名的网站，于是便有了后来创建博客的折腾路程，此贴是用来总结下搭建博客的过程，所以写得比较细（其实是怕自己以后忘了），希望对大家搭建博客有所帮助。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/sirlh/photo/master/a2.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="luheng&#39;s blog" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+
+
+<header id="allheader" class="site-header" role="banner" 
+   >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" title="luheng&#39;s blog" rel="home"> luheng&#39;s blog </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">首页</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">归档</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">分类</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">标签</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">关于</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/guestbook">留言</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-hexo-github搭建博客教程" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      hexo+github搭建博客教程
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2017/01/28/hexo-github搭建博客教程/" class="article-date">
+	  <time datetime="2017-01-28T06:07:28.000Z" itemprop="datePublished">一月 28, 2017</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/搞软件/">搞软件</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>前言：博主一开始想拥有一个专属域名的网站，于是便有了后来创建博客的折腾路程，此贴是用来总结下搭建博客的过程，所以写得比较细（其实是怕自己以后忘了），希望对大家搭建博客有所帮助。<a id="more"></a></p>
+<h3 id="准备阶段"><a href="#准备阶段" class="headerlink" title="准备阶段"></a>准备阶段</h3><p>软件准备：git；node.js；sublime（选用，最好有）</p>
+<p><a href="https://git-scm.com/download/win" target="_blank" rel="noopener">git（需翻墙）</a>：<br>如果你的电脑是window 64位可以<a href="https://pan.baidu.com/s/1i4xAM9Z" target="_blank" rel="noopener">点击此处下载</a></p>
+<blockquote>
+<p>把本地的 hexo 代码提交到 github 上去。</p>
+</blockquote>
+<p><a href="https://nodejs.org/en/" target="_blank" rel="noopener">node.js</a>：</p>
+<blockquote>
+<p>hexo 运行环境，用来创建 hexo 博客框架。</p>
+</blockquote>
+<p><a href="http://www.sublimetext.com/" target="_blank" rel="noopener">sublime（选用）</a>:</p>
+<blockquote>
+<p>用于修改博客界面 </p>
+</blockquote>
+<p><a href="http://jingyan.baidu.com/article/90895e0fb3495f64ed6b0b50.html" target="_blank" rel="noopener">git安装教程</a>，node.js和sublime安装比较简单，这里便不再赘述。</p>
+<p>git指令介绍：</p>
+<blockquote>
+<p>hexo g  #完整命令为 hexo generate,用于生成静态文件</p>
+<p>hexo s   #完整命令为 hexo server,用于启动服务器，主要用来本地预览</p>
+<p>hexo d   #完整命令为 hexo deploy,用于将本地文件发布到github上</p>
+<p>hexo n   #完整命令为 hexo new,用于新建一篇文章</p>
+<p>hexo clean   #清除生成的文件</p>
+<p>git clone:将远程仓库复制到本地</p>
+<p>git init:新建一个仓库</p>
+<p>git pull：抓取远程仓库所有分支更新并合并到本地</p>
+<p>git commit:提交你的修改</p>
+</blockquote>
+<h3 id="安装方法："><a href="#安装方法：" class="headerlink" title="安装方法："></a>安装方法：</h3><p>Hexo 是一个快速、简洁且高效的博客框架，我们首先要把这个框架搭起来，方法很简单：<br>任意位置右键看到Git Bash Here，点击。</p>
+<p><img src="https://raw.githubusercontent.com/sirlh/photo/master/a2.jpg" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/sirlh/photo/master/a3.jpg" alt=""></p>
+<p>打开git的命令窗口后，输入：</p>
+<blockquote>
+<p>npm install -g hexo</p>
+</blockquote>
+<p>如果命令无法运行，可以尝试更换taobao的npm源:</p>
+<blockquote>
+<p>npm config set registry  “<a href="https://registry.npm.taobao.org" target="_blank" rel="noopener">https://registry.npm.taobao.org</a>“</p>
+</blockquote>
+<p>安装完毕后，在自己喜欢的地方建立一个hexo文件（如E:\blog\hexo）,直接进入E:\blog\hexo点击鼠标右键执行Git Bash Here，然后在工作窗口执行以下命令：</p>
+<blockquote>
+<p>hexo init</p>
+<p>npm install</p>
+</blockquote>
+<p>hexo便安装完毕，在E:\blog\hexo内的目录如下：<br><img src="https://raw.githubusercontent.com/sirlh/photo/master/a1.jpg" alt=""></p>
+<h4 id="本地预览，可以简单的查看一下效果，输入命令："><a href="#本地预览，可以简单的查看一下效果，输入命令：" class="headerlink" title="本地预览，可以简单的查看一下效果，输入命令："></a>本地预览，可以简单的查看一下效果，输入命令：</h4><blockquote>
+<p>hexo s</p>
+</blockquote>
+<p>然后用浏览器访问<a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a>，应该能看到默认的效果了（自带主题landscape）。<br><img src="https://raw.githubusercontent.com/sirlh/photo/master/a4.jpg" alt=""></p>
+<p>之后便是部署到github上，这样才能在网上访问，而不是像现在在本地预览</p>
+<h4 id="申请一个github账号"><a href="#申请一个github账号" class="headerlink" title="申请一个github账号"></a>申请一个github账号</h4><p><a href="http://jingyan.baidu.com/article/455a9950abe0ada167277864.html" target="_blank" rel="noopener">教程传送门</a></p>
+<h4 id="建立项目仓库："><a href="#建立项目仓库：" class="headerlink" title="建立项目仓库："></a>建立项目仓库：</h4><p>注册完登陆后，创建一个我们自己的Github Pages项目。点击New repository。</p>
+<p>具体操作要点如下图</p>
+<p><img src="https://raw.githubusercontent.com/sirlh/photo/master/a5.jpg" alt=""></p>
+<p>创建好后便可以访问了，域名为：username.github.io（可是没有内容），我们需要配置SSH密钥，在本地上传点内容给它。</p>
+<h3 id="配置SSH密钥方法："><a href="#配置SSH密钥方法：" class="headerlink" title="配置SSH密钥方法："></a>配置SSH密钥方法：</h3><p>配置Github的SSH密钥可以让本地git项目与远程的github建立联系，让我们在本地写了代码之后直接通过git操作就可以实现本地代码库与Github代码库同步。</p>
+<p>第一次申请账号肯定不会有SSH密钥的，如果你忘记了自己是否已经添加了密钥，也可以打开git  bash输入：</p>
+<blockquote>
+<p>cd ~/. ssh </p>
+</blockquote>
+<p>检查你本机用户home目录下是否存在.ssh目录。</p>
+<p>如果已经添加则不必重复添加,否则需要执行下列步骤添加密钥：</p>
+<p>①创建一对新的SSH密钥(keys)</p>
+<blockquote>
+<p>ssh-keygen -t rsa -C “your_email@example.com”</p>
+</blockquote>
+<p>这会根据你提供的邮箱地址，创建一个密钥，你的邮箱也会有相应的邮箱提醒</p>
+<p>在git的命令窗口则会产生下列的回复</p>
+<blockquote>
+<p>Generating public/private rsa key pair.<br>Enter file in which to save the key (/c/Users/you/.ssh/id_rsa): [Press enter]</p>
+</blockquote>
+<p>直接回车键，密钥就会存放在命令窗口提示的路径中，如:(/c/Users/you/.ssh/id_rsa）。</p>
+<p>根据路径，打开密钥存放的文件夹，找到id_rsa文件，打开它，先复制里面的内容，那就是你的密钥（下面的配置会用到它）</p>
+<p>而在你的命令窗口，接下来就会有提示，根据提示，你需要输入密码和确认密码（其实有没有密码也无所谓，毕竟没有密码就是最好的密码，手动滑稽）。</p>
+<p>相应提示如下：</p>
+<blockquote>
+<p>Enter passphrase (empty for no passphrase): [Type a passphrase]</p>
+<p>Enter same passphrase again: [Type passphrase again]</p>
+</blockquote>
+<p>输入完之后，命令窗口便会有类似这样的信息：</p>
+<blockquote>
+<p>Your identification has been saved in /c/Users/you/.ssh/id_rsa.</p>
+<p>Your public key has been saved in /c/Users/you/.ssh/id_rsa.pub.<br>The key fingerprint is:<br>01:0f:f4:3b:ca:85:d6:17:a1:7d:f0:68:9d:f0:a2:db your_email@example.com</p>
+</blockquote>
+<p>之后便是在github网页上操作打开官网，进入你的Account Settings.<br><img src="https://raw.githubusercontent.com/sirlh/photo/master/a9.PNG" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/sirlh/photo/master/a6.PNG" alt=""></p>
+<p>点击settings。</p>
+<p><img src="https://raw.githubusercontent.com/sirlh/photo/master/a7.PNG" alt=""></p>
+<p>将密钥复制到窗口中</p>
+<p><img src="https://raw.githubusercontent.com/sirlh/photo/master/a8.png" alt=""></p>
+<p>之后SSH的密钥便设置完成。</p>
+<h4 id="测试是否配置成功："><a href="#测试是否配置成功：" class="headerlink" title="测试是否配置成功："></a>测试是否配置成功：</h4><p>输入下列命令</p>
+<blockquote>
+<p>ssh -T git@github.com</p>
+</blockquote>
+<p>若出现</p>
+<blockquote>
+<p>The authenticity of host ‘github.com (207.97.227.239)’ can’t be established.<br>RSA key fingerprint is 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.<br>Are you sure you want to continue connecting (yes/no)?</p>
+</blockquote>
+<p>回复yes即可。会看到</p>
+<blockquote>
+<p>Hi cnfeat! You’ve successfully authenticated, but GitHub does not provide shell access.</p>
+</blockquote>
+<p>完善个人信息：</p>
+<blockquote>
+<p>$ git config –global user.name “cnfeat”//用户名</p>
+<p>$ git config –global user.email  “cnfeat@gmail.com”//填写自己的邮箱</p>
+</blockquote>
+<p>现在恭喜你，你的SSH已经配置成功,本地已与github成功连接。</p>
+<h3 id="如有问题，请参考"><a href="#如有问题，请参考" class="headerlink" title="如有问题，请参考"></a>如有问题，请参考</h3><p><a href="https://help.github.com/articles/generating-an-ssh-key/" target="_blank" rel="noopener">GitHub Help - Generating SSH Keys</a></p>
+<p><a href="https://help.github.com/articles/error-permission-denied-publickey/" target="_blank" rel="noopener">Error: Permission denied (publickey)</a></p>
+<p>既然连接好了，我们就要传点东西给它才好，下面是教程。</p>
+<p>将本地的Hexo文件更新到Github的库中：<br>登录Github打开自己的项目 username.github.io;</p>
+<p>之后找到clone or download并点击：</p>
+<p><img src="https://raw.githubusercontent.com/sirlh/photo/master/a10.jpg" alt=""></p>
+<p>复制地址</p>
+<p><img src="https://raw.githubusercontent.com/sirlh/photo/master/a11.jpg" alt=""></p>
+<p>打开你一开始创建的Hexo文件夹（如F:\Blog\Hexo），用sublime(没有的话，用记事本也行)打开文件夹下的_config.yml文件</p>
+<p><img src="https://raw.githubusercontent.com/sirlh/photo/master/a12.jpg" alt=""></p>
+<p>在里面修改配置并保存<br><img src="https://raw.githubusercontent.com/sirlh/photo/master/a13.jpg" alt=""><br>在hexo下执行</p>
+<blockquote>
+<p>hexo g</p>
+<p>hexo d</p>
+</blockquote>
+<p>第一次hexo d可能会报错：</p>
+<blockquote>
+<p>ERROR Deployer not found:git</p>
+</blockquote>
+<p>需要安装一下hexo-deployer-git这个插件：</p>
+<blockquote>
+<p>npm install hexo-deployer-git –save</p>
+</blockquote>
+<p>这时候输入自己的博客域名，地址是 username.github.io（我的是sirlh.github.io） 在网页上就可以看到自己的博客了</p>
+<p>另外还有一些资料：</p>
+<p><a href="https://www.jianshu.com/p/efbeddc5eb19" target="_blank" rel="noopener">https://www.jianshu.com/p/efbeddc5eb19</a></p>
+<p><a href="http://blog.csdn.net/gdutxiaoxu/article/details/53576018" target="_blank" rel="noopener">http://blog.csdn.net/gdutxiaoxu/article/details/53576018</a></p>
+<p><strong>注：部分图片来自<a href="http://www.jianshu.com/p/0b33006a48e6" target="_blank" rel="noopener">http://www.jianshu.com/p/0b33006a48e6</a>,侵删。</strong></p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/搞软件/">搞软件</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li></ul>
+
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTM3NS83OTM4">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/02/19/markdown的基本使用/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          markdown的基本使用
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#准备阶段"><span class="nav-number">1.</span> <span class="nav-text">准备阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装方法："><span class="nav-number">2.</span> <span class="nav-text">安装方法：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#本地预览，可以简单的查看一下效果，输入命令："><span class="nav-number">2.1.</span> <span class="nav-text">本地预览，可以简单的查看一下效果，输入命令：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#申请一个github账号"><span class="nav-number">2.2.</span> <span class="nav-text">申请一个github账号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#建立项目仓库："><span class="nav-number">2.3.</span> <span class="nav-text">建立项目仓库：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置SSH密钥方法："><span class="nav-number">3.</span> <span class="nav-text">配置SSH密钥方法：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#测试是否配置成功："><span class="nav-number">3.1.</span> <span class="nav-text">测试是否配置成功：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如有问题，请参考"><span class="nav-number">4.</span> <span class="nav-text">如有问题，请参考</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+    <a href="/guestbook" class="mobile-nav-link">guestbook</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2018 luheng&#39;s blog All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script>
+</body>
+</html>

@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>FPGA.赋值语句 | luheng&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="FPGA，赋值语句,verilog" />
+  
+  
+  
+  
+  <meta name="description" content="赋值语句应该是开发过程中使用最多的语句，在FPGA中，赋值语句分为“非阻塞赋值”和“阻塞赋值”，什么是“非阻塞赋值”？ 什么是“阻塞赋值”？它们的区别在哪？下面用具体实例来说明。">
+<meta name="keywords" content="FPGA，赋值语句,verilog">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FPGA.赋值语句">
+<meta property="og:url" content="http://www.luheng.online/2017/10/27/FPGA.赋值语句/index.html">
+<meta property="og:site_name" content="luheng&#39;s blog">
+<meta property="og:description" content="赋值语句应该是开发过程中使用最多的语句，在FPGA中，赋值语句分为“非阻塞赋值”和“阻塞赋值”，什么是“非阻塞赋值”？ 什么是“阻塞赋值”？它们的区别在哪？下面用具体实例来说明。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/n_assignment.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/2_1.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/2.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/1_2.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/2_2.PNG">
+<meta property="og:updated_time" content="2018-01-08T02:38:00.658Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="FPGA.赋值语句">
+<meta name="twitter:description" content="赋值语句应该是开发过程中使用最多的语句，在FPGA中，赋值语句分为“非阻塞赋值”和“阻塞赋值”，什么是“非阻塞赋值”？ 什么是“阻塞赋值”？它们的区别在哪？下面用具体实例来说明。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/n_assignment.PNG">
+  
+    <link rel="alternate" href="/atom.xml" title="luheng&#39;s blog" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+
+
+<header id="allheader" class="site-header" role="banner" 
+   >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" title="luheng&#39;s blog" rel="home"> luheng&#39;s blog </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">首页</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">归档</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">分类</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">标签</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">关于</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/guestbook">留言</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-FPGA.赋值语句" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      FPGA.赋值语句
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2017/10/27/FPGA.赋值语句/" class="article-date">
+	  <time datetime="2017-10-27T01:37:17.000Z" itemprop="datePublished">十月 27, 2017</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/搞硬件/">搞硬件</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>赋值语句应该是开发过程中使用最多的语句，在FPGA中，赋值语句分为“非阻塞赋值”和“阻塞赋值”，什么是“非阻塞赋值”？ 什么是“阻塞赋值”？它们的区别在哪？下面用具体实例来说明。<br><a id="more"></a></p>
+<p>不论学习什么语句，都是先认识，了解一下它再去使用，所谓”知己知彼，方可百战不殆”。</p>
+<h3 id="非阻塞赋值"><a href="#非阻塞赋值" class="headerlink" title="非阻塞赋值"></a>非阻塞赋值</h3><p>赋值很好理解，重点在“非阻塞”，“阻塞” 就是 堵 ，“非”表 否定。非阻塞就是通畅嘛，那通畅怎么样的？</p>
+<p>先看下面这段代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">initial</span><br><span class="line">	begin</span><br><span class="line">		A &lt;= B; // 语句1</span><br><span class="line">		B &lt;= A; // 语句2</span><br><span class="line">	end</span><br></pre></td></tr></table></figure></p>
+<p>其中操作符 “&lt;=” 就是非阻塞型幅值语句。<br>我们看begin — end里的两个句子，到底哪个先执行呢？</p>
+<p>答案是同时执行，因为它是非阻塞幅值，一路通畅啊，谁也拦不了我，我走我的，你走你的，互不干扰，通畅就通畅在这里。</p>
+<p>现在提个问题：若A=1,B=2,那么执行以上语句后，A和B会变成什么呢？</p>
+<p>想知道答案，我最好的办法就是编程，然后仿真看下结果。</p>
+<p>源文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">///////////////////////////</span><br><span class="line">//  文件名：非阻塞赋值语句  //</span><br><span class="line">//  修改时间：2017.10.27   //</span><br><span class="line">///////////////////////////</span><br><span class="line"></span><br><span class="line">`timescale 1ns / 1ps</span><br><span class="line">module n_assignment(</span><br><span class="line">   input wire clk,</span><br><span class="line">   input wire rst,</span><br><span class="line">   output reg [1:0]A,B</span><br><span class="line">   );</span><br><span class="line">    </span><br><span class="line">   always @(posedge clk,negedge rst)</span><br><span class="line">       begin</span><br><span class="line">           if(!rst)</span><br><span class="line">               begin</span><br><span class="line">                   A &lt;= 1;</span><br><span class="line">                   B &lt;= 2;</span><br><span class="line">               end</span><br><span class="line">            else</span><br><span class="line">               begin</span><br><span class="line">                   A &lt;= B;</span><br><span class="line">                   B &lt;= A;</span><br><span class="line">               end</span><br><span class="line">       end</span><br><span class="line">endmodule</span><br></pre></td></tr></table></figure>
+<p>写tb文件看下效果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">`timescale 1ns / 1ps</span><br><span class="line">module tb_n_assignment;</span><br><span class="line">   reg clk;</span><br><span class="line">   reg rst;</span><br><span class="line">   wire [1:0]A;</span><br><span class="line">   wire [1:0]B;</span><br><span class="line">   </span><br><span class="line">   //例化</span><br><span class="line">   n_assignment uuit(.clk(clk),.rst(rst),.A(A),.B(B));</span><br><span class="line">   </span><br><span class="line">   initial</span><br><span class="line">       begin</span><br><span class="line">           rst = 0;#100;</span><br><span class="line">           rst = 1; </span><br><span class="line">       end</span><br><span class="line">   </span><br><span class="line">   always</span><br><span class="line">   begin</span><br><span class="line">       clk=1;#10; </span><br><span class="line">       clk=0;#10;</span><br><span class="line">   end</span><br><span class="line">endmodule</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/n_assignment.PNG" alt="仿真图"></p>
+<p>这样我们从仿真图可以看出，这段代码实现的功能是将A,B两者的数据转换，也就是说执行</p>
+<blockquote>
+<p>   begin<br>            A &lt;= B; // 语句1<br>            B &lt;= A; // 语句2<br>        end</p>
+</blockquote>
+<p>A,B同时给对方值，给的是自己的初值，当一赋值之后就变成了对方＜（＾－＾）＞，这就类似两名相向跑步的运动员，起点便是初值，我们同时出发，速度都一样，所以A到了B出点时，B也到了A的出发点，也就是 A&lt;=B,B&lt;=A，我变成了你，你变成了我。<br><img src="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/1.png" alt=""><br>非阻塞赋值就是这样啦，下面看阻塞型赋值。</p>
+<h3 id="阻塞型赋值"><a href="#阻塞型赋值" class="headerlink" title="阻塞型赋值"></a>阻塞型赋值</h3><p>阻塞型赋值说明在赋值时堵住了，那这堵又是怎么回事呢？<br>老办法，写代码做实验，仿真看结果。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">///////////////////////////</span><br><span class="line">//  文件名：阻塞赋值语句  //</span><br><span class="line">//  修改时间：2017.10.27   //</span><br><span class="line">///////////////////////////</span><br><span class="line"></span><br><span class="line">`timescale 1ns / 1ps</span><br><span class="line">module assignment(</span><br><span class="line">   input wire clk,</span><br><span class="line">   input wire rst,</span><br><span class="line">   output reg [1:0]A,B</span><br><span class="line">   );</span><br><span class="line">    </span><br><span class="line">   always @(posedge clk,negedge rst)</span><br><span class="line">       begin</span><br><span class="line">           if(!rst)</span><br><span class="line">               begin</span><br><span class="line">                   A = 1;</span><br><span class="line">                   B = 2;</span><br><span class="line">               end</span><br><span class="line">            else</span><br><span class="line">               begin</span><br><span class="line">                   A = B;</span><br><span class="line">                   B = A;</span><br><span class="line">               end</span><br><span class="line">       end</span><br><span class="line">endmodule</span><br></pre></td></tr></table></figure></p>
+<p>tb文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">module tb_assignment;</span><br><span class="line">    reg clk;</span><br><span class="line">    reg rst;</span><br><span class="line">    wire [1:0]A;</span><br><span class="line">    wire [1:0]B;</span><br><span class="line">    </span><br><span class="line">    //例化</span><br><span class="line">    assignment uuit(.clk(clk),.rst(rst),.A(A),.B(B));</span><br><span class="line">    </span><br><span class="line">    initial</span><br><span class="line">        begin</span><br><span class="line">            rst = 0;#100;</span><br><span class="line">            rst = 1; </span><br><span class="line">        end</span><br><span class="line">    </span><br><span class="line">    always</span><br><span class="line">    begin</span><br><span class="line">        clk=1;#10; </span><br><span class="line">        clk=0;#10;</span><br><span class="line">    end</span><br><span class="line">endmodule</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/2_1.PNG" alt=""><br>可以看出这段代码的功能不再是交换A,B两者的值了,毕竟代码改了，赋值变成阻塞的了，功能当然不一样，这好像是废话，(lll￢ω￢)<br>我们再看看这段代码</p>
+<blockquote>
+<p>   begin<br>        A = B;<br>           B = A; //注意赋值是阻塞的<br>    end</p>
+</blockquote>
+<p>它是先执行A=B,B把自身的值给了A，然后再执行A=B。<br><img src="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/2.PNG" alt=""><br>就像接力赛，前面的执行了后面才能执行，语句A拿着接力棒，跑完了自己的路程,即执行了自己的语句，把接力棒交给语句B，B才能往前走，去执行它的语句。</p>
+<h3 id="电路构成的差异比较"><a href="#电路构成的差异比较" class="headerlink" title="电路构成的差异比较"></a>电路构成的差异比较</h3><p>好的，通过上面的两个例子，非阻塞型赋值和阻塞型的性质的都解释好了，下面再看下它们形成电路上的差异。<br>我们看这段代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">module and_block_assign</span><br><span class="line">(</span><br><span class="line">	input wire a,b,c,</span><br><span class="line">	output reg y</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">always @*</span><br><span class="line">	begin</span><br><span class="line">		y=a;</span><br><span class="line">		y=y&amp;b;</span><br><span class="line">		y=y&amp;c;</span><br><span class="line">	end</span><br><span class="line">endmodule</span><br></pre></td></tr></table></figure></p>
+<p>以上代码描述的电路是这样的<br><img src="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/1_2.PNG" alt=""></p>
+<p>但是阻塞赋值语句变成非阻塞赋值语句后，也就是下面这段代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">module and_block_assign</span><br><span class="line">(</span><br><span class="line">	input wire a,b,c,</span><br><span class="line">	output reg y</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">always @*</span><br><span class="line">	begin</span><br><span class="line">		y&lt;=a;</span><br><span class="line">		y&lt;=y&amp;b;</span><br><span class="line">		y&lt;=y&amp;c;</span><br><span class="line">	end</span><br><span class="line">endmodule</span><br></pre></td></tr></table></figure></p>
+<p>它描述的电路却是这样的<br><img src="https://raw.githubusercontent.com/sirlh/photo/master/FPGA/assignment/2_2.PNG" alt=""></p>
+<p>可以看出两者的差别是还是很大的，好了，关于赋值语句我就唠叨到这里，文章若有什么错误的地方希望读者指出，同时也欢迎大家和我在评论区交流，当然打赏那是最好不过的了。</p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/搞硬件/">搞硬件</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FPGA/">FPGA</a></li></ul>
+
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTM3NS83OTM4">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/11/03/FPGA.矩阵键盘/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          FPGA.矩阵键盘
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/10/20/FPGA.计数器书写——以60进制、24进制举例/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">FPGA.计数器书写——以60进制、24进制举例</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#非阻塞赋值"><span class="nav-number">1.</span> <span class="nav-text">非阻塞赋值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#阻塞型赋值"><span class="nav-number">2.</span> <span class="nav-text">阻塞型赋值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#电路构成的差异比较"><span class="nav-number">3.</span> <span class="nav-text">电路构成的差异比较</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+    <a href="/guestbook" class="mobile-nav-link">guestbook</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2018 luheng&#39;s blog All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script>
+</body>
+</html>
