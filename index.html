@@ -2,8 +2,18 @@
 <html>
 <head>
   <meta charset="utf-8">
+
+  <!-- PACE Progress Bar START -->
   
-  <title>第 1 页 | luheng&#39;s blog</title>
+    <script src="/js/pace.min.js"></script>
+    <link rel="stylesheet" href="https://github.com/HubSpot/pace/raw/master/themes/orange/pace-theme-flash.css">
+  
+  
+
+  <!-- PACE Progress Bar START -->
+
+  
+  <title>luheng&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
   
@@ -33,29 +43,50 @@
     @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
     
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-
-  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
   <link rel="stylesheet" href="/css/style.css">
 
   <script src="/js/jquery-3.1.1.min.js"></script>
 
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="/css/bootstrap.css" >
-  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/hiero.css" >
   <link rel="stylesheet" href="/css/glyphs.css" >
+  
+    <link rel="stylesheet" href="/css/vdonate.css" >
+  
 
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/my.css">
+  <!-- Google Adsense -->
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+      (adsbygoogle = window.adsbygoogle || []).push({
+          google_ad_client: "ca-pub-0123456789ABCDEF",
+          enable_page_level_ads: true
+      });
+  </script>
 </head>
 
+<script>
+var themeMenus = {};
+
+  themeMenus["/"] = "首页"; 
+
+  themeMenus["/archives"] = "归档"; 
+
+  themeMenus["/tags"] = "标签"; 
+
+  themeMenus["/about"] = "关于"; 
+
+  themeMenus["/guestbook"] = "留言"; 
+
+</script>
 
 
   <body>
 
 
-  
-
-
-<header id="allheader" class="site-header" role="banner" 
-   >
+  <header id="allheader" class="site-header" role="banner">
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -64,15 +95,15 @@
               <a href="/" title="luheng&#39;s blog" rel="home"> luheng&#39;s blog </a>
             
           </h1>
-          
+
           
             
           <nav id="main-navigation" class="main-navigation" role="navigation">
             <a class="nav-open">Menu</a>
             <a class="nav-close">Close</a>
-
             <div class="clearfix sf-menu">
-              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+
+              <ul id="main-nav" class="nmenu sf-js-enabled">
                     
                       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">首页</a> </li>
                     
@@ -88,9 +119,39 @@
             </div>
           </nav>
 
+
       </div>
   </div>
 </header>
+
+
+  <div id="originBgDiv" style="background: #fff; width: 100%;">
+
+      <div style="max-height:600px; overflow: hidden;  display: flex; display: -webkit-flex; align-items: center;">
+        <img id="originBg" width="100%" alt="" src="">
+      </div>
+
+  </div>
+
+  <script>
+  function setAboutIMG(){
+      var imgUrls = "css/images/pose.jpg,https://source.unsplash.com/collection/954550/1920x1080".split(",");
+      var random = Math.floor((Math.random() * imgUrls.length ));
+      if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+        document.getElementById("originBg").src=imgUrls[random];
+      } else {
+        document.getElementById("originBg").src='/' + imgUrls[random];
+      }
+  }
+  bgDiv=document.getElementById("originBgDiv");
+  if(location.pathname.match('about')){
+    setAboutIMG();
+    bgDiv.style.display='block';
+  }else{
+    bgDiv.style.display='none';
+  }
+  </script>
+
 
 
   <div id="container">
@@ -116,14 +177,10 @@
     
     <div class="article-meta">
       
-	<a href="/2018/01/06/FPGA-避障游戏/" class="article-date">
+	Posted on <a href="/2018/01/06/FPGA-避障游戏/" class="article-date">
 	  <time datetime="2018-01-06T04:21:12.000Z" itemprop="datePublished">一月 6, 2018</time>
 	</a>
 
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/搞硬件/">搞硬件</a>
- 
       
     </div>
     <div class="article-entry" itemprop="articleBody">
@@ -131,8 +188,9 @@
         
 
           
-          <div class="entry-summary">
-          这是一个使用FPGA制作的小游戏，知识主要是VGA的使用和关于游戏的逻辑处理。在这篇中将会讲诉VGA的显示原理和使用，还有一些关于键盘的消抖的小知识。
+            <div class="entry-summary" style="margin-left:0;">
+            这是一个使用FPGA制作的小游戏，知识主要是VGA的使用和关于游戏的逻辑处理。在这篇中将会讲诉VGA的显示原理和使用，还有一些关于键盘的消抖的小知识。
+          
 
         
           <p class="article-more-link">
@@ -151,8 +209,9 @@
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FPGA/">FPGA</a></li></ul>
 
       
+            
+      
     </footer>
-    <hr class="entry-footer-hr">
   </div>
   
 </article>
@@ -176,14 +235,10 @@
     
     <div class="article-meta">
       
-	<a href="/2017/11/22/FPGA-数字闹钟/" class="article-date">
+	Posted on <a href="/2017/11/22/FPGA-数字闹钟/" class="article-date">
 	  <time datetime="2017-11-22T13:28:09.000Z" itemprop="datePublished">十一月 22, 2017</time>
 	</a>
 
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/搞硬件/">搞硬件</a>
- 
       
     </div>
     <div class="article-entry" itemprop="articleBody">
@@ -191,8 +246,9 @@
         
 
           
-          <div class="entry-summary">
-          用FPGA设计一个数字闹钟应该说是一个比较综合的小系统，包含了按键、数码管、状态机等内容，本文主要是讲述三键输入的数字闹钟总体的设计，整个作品和小时候两三块一个的电子手表十分类似。下面具体讲解…
+            <div class="entry-summary" style="margin-left:0;">
+            用FPGA设计一个数字闹钟应该说是一个比较综合的小系统，包含了按键、数码管、状态机等内容，本文主要是讲述三键输入的数字闹钟总体的设计，整个作品和小时候两三块一个的电子手表十分类似。下面具体讲解…
+          
 
         
           <p class="article-more-link">
@@ -211,8 +267,9 @@
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FPGA/">FPGA</a></li></ul>
 
       
+            
+      
     </footer>
-    <hr class="entry-footer-hr">
   </div>
   
 </article>
@@ -236,14 +293,10 @@
     
     <div class="article-meta">
       
-	<a href="/2017/11/09/matlab实现快速傅里叶变换/" class="article-date">
+	Posted on <a href="/2017/11/09/matlab实现快速傅里叶变换/" class="article-date">
 	  <time datetime="2017-11-09T08:05:45.000Z" itemprop="datePublished">十一月 9, 2017</time>
 	</a>
 
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/搞软件/">搞软件</a>
- 
       
     </div>
     <div class="article-entry" itemprop="articleBody">
@@ -251,8 +304,9 @@
         
 
           
-          <div class="entry-summary">
-          傅里叶变换是能将信号从时域转到频域的一种变换形式，是我们分析信号的常用方法，毕竟相比于时域的纷乱复杂，频域显得清爽很多。有关傅里叶变换的理解，可以看我之前转载的一篇文章：【转载】傅里叶分析之掐死教程（完整版） 。本篇文章主要介绍快速傅里叶变换（FFT）的一种，基2FFT，讲诉计算原理和提供相应的matlab代码。
+            <div class="entry-summary" style="margin-left:0;">
+            傅里叶变换是能将信号从时域转到频域的一种变换形式，是我们分析信号的常用方法，毕竟相比于时域的纷乱复杂，频域显得清爽很多。有关傅里叶变换的理解，可以看我之前转载的一篇文章：【转载】傅里叶分析之掐死教程（完整版） 。本篇文章主要介绍快速傅里叶变换（FFT）的一种，基2FFT，讲诉计算原理和提供相应的matlab代码。
+          
 
         
           <p class="article-more-link">
@@ -271,8 +325,9 @@
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/matlab/">matlab</a></li></ul>
 
       
+            
+      
     </footer>
-    <hr class="entry-footer-hr">
   </div>
   
 </article>
@@ -296,14 +351,10 @@
     
     <div class="article-meta">
       
-	<a href="/2017/11/03/FPGA.矩阵键盘/" class="article-date">
+	Posted on <a href="/2017/11/03/FPGA.矩阵键盘/" class="article-date">
 	  <time datetime="2017-11-03T03:50:27.000Z" itemprop="datePublished">十一月 3, 2017</time>
 	</a>
 
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/搞硬件/">搞硬件</a>
- 
       
     </div>
     <div class="article-entry" itemprop="articleBody">
@@ -311,9 +362,10 @@
         
 
           
-          <div class="entry-summary">
-          矩阵键盘是外部设备中所使用的排布类似于矩阵的键盘组。矩阵式结构的键盘显然比直接法要复杂一些，识别也要复杂一些，列线通过电阻接正电源，并将行线所接的芯片的I/O口作为输出端，而列线所接的I/O口则作为输入。
+            <div class="entry-summary" style="margin-left:0;">
+            矩阵键盘是外部设备中所使用的排布类似于矩阵的键盘组。矩阵式结构的键盘显然比直接法要复杂一些，识别也要复杂一些，列线通过电阻接正电源，并将行线所接的芯片的I/O口作为输出端，而列线所接的I/O口则作为输入。
 本文简单的讲诉下矩阵键盘的扫描原理，给出相应的代码和测试文件。
+          
 
         
           <p class="article-more-link">
@@ -332,8 +384,9 @@
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FPGA/">FPGA</a></li></ul>
 
       
+            
+      
     </footer>
-    <hr class="entry-footer-hr">
   </div>
   
 </article>
@@ -357,14 +410,10 @@
     
     <div class="article-meta">
       
-	<a href="/2017/10/27/FPGA.赋值语句/" class="article-date">
+	Posted on <a href="/2017/10/27/FPGA.赋值语句/" class="article-date">
 	  <time datetime="2017-10-27T01:37:17.000Z" itemprop="datePublished">十月 27, 2017</time>
 	</a>
 
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/搞硬件/">搞硬件</a>
- 
       
     </div>
     <div class="article-entry" itemprop="articleBody">
@@ -372,8 +421,9 @@
         
 
           
-          <div class="entry-summary">
-          赋值语句应该是开发过程中使用最多的语句，在FPGA中，赋值语句分为“非阻塞赋值”和“阻塞赋值”，什么是“非阻塞赋值”？ 什么是“阻塞赋值”？它们的区别在哪？下面用具体实例来说明。
+            <div class="entry-summary" style="margin-left:0;">
+            赋值语句应该是开发过程中使用最多的语句，在FPGA中，赋值语句分为“非阻塞赋值”和“阻塞赋值”，什么是“非阻塞赋值”？ 什么是“阻塞赋值”？它们的区别在哪？下面用具体实例来说明。
+          
 
         
           <p class="article-more-link">
@@ -392,8 +442,9 @@
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FPGA/">FPGA</a></li></ul>
 
       
+            
+      
     </footer>
-    <hr class="entry-footer-hr">
   </div>
   
 </article>
@@ -417,14 +468,10 @@
     
     <div class="article-meta">
       
-	<a href="/2017/10/20/FPGA.计数器书写——以60进制、24进制举例/" class="article-date">
+	Posted on <a href="/2017/10/20/FPGA.计数器书写——以60进制、24进制举例/" class="article-date">
 	  <time datetime="2017-10-20T13:58:42.000Z" itemprop="datePublished">十月 20, 2017</time>
 	</a>
 
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/搞硬件/">搞硬件</a>
- 
       
     </div>
     <div class="article-entry" itemprop="articleBody">
@@ -432,8 +479,9 @@
         
 
           
-          <div class="entry-summary">
-          计数器在数字系统中主要是对脉冲的个数进行计数，以实现测量、计数和控制的功能，同时兼有分频功能。其实说白了，就是正常使用的情况下，你来个脉冲信号，我给你+1。当然实际情况下，为满足我的需要，我们会为计数器加上一“功能”，如：置数，复位。具体情况根据需要而定，但不管怎样，计数器都是较为简单的。
+            <div class="entry-summary" style="margin-left:0;">
+            计数器在数字系统中主要是对脉冲的个数进行计数，以实现测量、计数和控制的功能，同时兼有分频功能。其实说白了，就是正常使用的情况下，你来个脉冲信号，我给你+1。当然实际情况下，为满足我的需要，我们会为计数器加上一“功能”，如：置数，复位。具体情况根据需要而定，但不管怎样，计数器都是较为简单的。
+          
 
         
           <p class="article-more-link">
@@ -452,8 +500,9 @@
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FPGA/">FPGA</a></li></ul>
 
       
+            
+      
     </footer>
-    <hr class="entry-footer-hr">
   </div>
   
 </article>
@@ -477,14 +526,10 @@
     
     <div class="article-meta">
       
-	<a href="/2017/05/26/半导体致冷原理与实例/" class="article-date">
+	Posted on <a href="/2017/05/26/半导体致冷原理与实例/" class="article-date">
 	  <time datetime="2017-05-26T14:04:20.000Z" itemprop="datePublished">五月 26, 2017</time>
 	</a>
 
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/搞硬件/">搞硬件</a>
- 
       
     </div>
     <div class="article-entry" itemprop="articleBody">
@@ -492,8 +537,9 @@
         
 
           
-          <div class="entry-summary">
-          如果你之前没有听说过’半导体致冷’，甚至对半导体都很陌生，那么相信这篇文章是能让你“涨姿势”的,本篇文章将通过讲诉一个小冰箱的制作过程，分析它的工作原理，让大家对半导体致冷有个大体认识。夏日炎炎，为何不让半导体帮你清凉一下？
+            <div class="entry-summary" style="margin-left:0;">
+            如果你之前没有听说过’半导体致冷’，甚至对半导体都很陌生，那么相信这篇文章是能让你“涨姿势”的,本篇文章将通过讲诉一个小冰箱的制作过程，分析它的工作原理，让大家对半导体致冷有个大体认识。夏日炎炎，为何不让半导体帮你清凉一下？
+          
 
         
           <p class="article-more-link">
@@ -512,8 +558,9 @@
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/半导体致冷/">半导体致冷</a></li></ul>
 
       
+            
+      
     </footer>
-    <hr class="entry-footer-hr">
   </div>
   
 </article>
@@ -537,14 +584,10 @@
     
     <div class="article-meta">
       
-	<a href="/2017/05/13/一个故事告诉你比特币的原理及运作机制（转载）/" class="article-date">
+	Posted on <a href="/2017/05/13/一个故事告诉你比特币的原理及运作机制（转载）/" class="article-date">
 	  <time datetime="2017-05-13T07:51:17.000Z" itemprop="datePublished">五月 13, 2017</time>
 	</a>
 
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/搞娱乐/">搞娱乐</a>
- 
       
     </div>
     <div class="article-entry" itemprop="articleBody">
@@ -552,8 +595,9 @@
         
 
           
-          <div class="entry-summary">
-          周末花时间看了一些比特币原理相关的资料，虽然不敢说把每个细节都完全搞懂了，不过整体思路和关键部分的主要原理还是比较明白。写一篇文章分享给大家。这篇文章的定位会比较科普，尽量用类比的方法将比特币的基本原理讲出来。这篇文章不会涉及算法和协议中比较细节的部分，打算后面会再写一篇程序员视角下的比特币原理，那里会从技术人员的视角对比特币系统中较为关键的数据结构、算法和协议进行一些讲解。
+            <div class="entry-summary" style="margin-left:0;">
+            周末花时间看了一些比特币原理相关的资料，虽然不敢说把每个细节都完全搞懂了，不过整体思路和关键部分的主要原理还是比较明白。写一篇文章分享给大家。这篇文章的定位会比较科普，尽量用类比的方法将比特币的基本原理讲出来。这篇文章不会涉及算法和协议中比较细节的部分，打算后面会再写一篇程序员视角下的比特币原理，那里会从技术人员的视角对比特币系统中较为关键的数据结构、算法和协议进行一些讲解。
+          
 
         
           <p class="article-more-link">
@@ -572,8 +616,9 @@
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/比特币/">比特币</a></li></ul>
 
       
+            
+      
     </footer>
-    <hr class="entry-footer-hr">
   </div>
   
 </article>
@@ -597,14 +642,10 @@
     
     <div class="article-meta">
       
-	<a href="/2017/04/19/傅里叶分析之掐死教程（转载）/" class="article-date">
+	Posted on <a href="/2017/04/19/傅里叶分析之掐死教程（转载）/" class="article-date">
 	  <time datetime="2017-04-19T10:30:52.000Z" itemprop="datePublished">四月 19, 2017</time>
 	</a>
 
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/搞专业/">搞专业</a>
- 
       
     </div>
     <div class="article-entry" itemprop="articleBody">
@@ -612,8 +653,9 @@
         
 
           
-          <div class="entry-summary">
-          这篇文章的核心思想就是：要让读者在不看任何数学公式的情况下理解傅里叶分析。
+            <div class="entry-summary" style="margin-left:0;">
+            这篇文章的核心思想就是：要让读者在不看任何数学公式的情况下理解傅里叶分析。
+          
 
         
           <p class="article-more-link">
@@ -632,8 +674,9 @@
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/傅里叶级数/">傅里叶级数</a></li></ul>
 
       
+            
+      
     </footer>
-    <hr class="entry-footer-hr">
   </div>
   
 </article>
@@ -657,14 +700,10 @@
     
     <div class="article-meta">
       
-	<a href="/2017/03/01/天下文章不负文人/" class="article-date">
+	Posted on <a href="/2017/03/01/天下文章不负文人/" class="article-date">
 	  <time datetime="2017-03-01T09:11:36.000Z" itemprop="datePublished">三月 1, 2017</time>
 	</a>
 
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/搞生活/">搞生活</a>
- 
       
     </div>
     <div class="article-entry" itemprop="articleBody">
@@ -672,8 +711,9 @@
         
 
           
-          <div class="entry-summary">
-          惟古于词必己出,降而不能乃剽贼
+            <div class="entry-summary" style="margin-left:0;">
+            惟古于词必己出,降而不能乃剽贼
+          
 
         
           <p class="article-more-link">
@@ -692,8 +732,9 @@
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/慎独/">慎独</a></li></ul>
 
       
+            
+      
     </footer>
-    <hr class="entry-footer-hr">
   </div>
   
 </article>
@@ -711,72 +752,44 @@
 </section>
           <aside id="sidebar">
   
-    <div style="margin: 20px 0;">
+    <div class="widget-wrap" style="margin: 20px 0;">
 	<div id="search-form-wrap">
 
     <form class="search-form">
-        <label style="width: 72%;">
+        <label style="width: 75%;">
             <span class="screen-reader-text">Search for:</span>
-            <input type="search" class="search-field" style="height: 36px; width: 100%;" placeholder=" 搜索…" value="" name="s" title="Search for:">
+            <input type="search" class="search-field" style="height: 42px;" placeholder=" 搜索…" value="" name="s" title="Search for:">
         </label>
         <input type="submit" class="search-form-submit" value="搜索">
     </form>
     <div class="ins-search">
-
     <div class="ins-search-mask"></div>
-
     <div class="ins-search-container">
-
         <div class="ins-input-wrapper">
-
             <input type="text" class="ins-search-input" placeholder="请输入关键词..."/>
-
             <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
-
         </div>
-
         <div class="ins-section-wrapper">
-
             <div class="ins-section-container"></div>
-
         </div>
-
     </div>
-
 </div>
-
 <script>
-
 (function (window) {
-
     var INSIGHT_CONFIG = {
-
         TRANSLATION: {
-
             POSTS: '文章',
-
             PAGES: '页面',
-
             CATEGORIES: '分类',
-
             TAGS: '标签',
-
             UNTITLED: '(无标题)',
-
         },
-
         ROOT_URL: '/',
-
         CONTENT_URL: '/content.json',
-
     };
-
     window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-
 })(window);
-
 </script>
-
 <script src="/js/insight.js"></script>
 
 </div>
@@ -910,7 +923,33 @@
 </aside>
         
       </div>
+      <footer id="footer" class="site-footer">
+  
 
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2018 luheng&#39;s blog All Rights Reserved.
+          
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var contentdiv = document.getElementById("content");
+
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+</script>
+
+<!-- Custome JS -->
+<script src="/js/my.js"></script>
     </div>
     <!-- <nav id="mobile-nav">
   
@@ -925,41 +964,7 @@
     <a href="/guestbook" class="mobile-nav-link">guestbook</a>
   
 </nav> -->
-    <footer id="footer" class="site-footer">
-  
-
-  <div class="clearfix container">
-      <div class="site-info">
-	      &copy; 2018 luheng&#39;s blog All Rights Reserved.
-        
-            <span id="busuanzi_container_site_uv">
-              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
-              本站总访问量<span id="busuanzi_value_site_pv"></span>次
-            </span>
-          
-      </div>
-  </div>
-</footer>
-
-
-<!-- min height -->
-
-<script>
-    var wrapdiv = document.getElementById("wrap");
-    var contentdiv = document.getElementById("content");
-
-    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
-    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
-
-
-    <!-- headerblur min height -->
     
-    
-</script>
-    
-<div style="display: none;">
-  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
-</div>
 
 <!-- mathjax config similar to math.stackexchange -->
 
@@ -997,7 +1002,7 @@
   <script src="/fancybox/jquery.fancybox.pack.js"></script>
 
 
-<script src="/js/script.js"></script>
+<script src="/js/scripts.js"></script>
 <script src="/js/bootstrap.js"></script>
 <script src="/js/main.js"></script>
 

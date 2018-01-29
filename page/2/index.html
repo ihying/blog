@@ -2,8 +2,18 @@
 <html>
 <head>
   <meta charset="utf-8">
+
+  <!-- PACE Progress Bar START -->
   
-  <title>第 2 页 | luheng&#39;s blog</title>
+    <script src="/js/pace.min.js"></script>
+    <link rel="stylesheet" href="https://github.com/HubSpot/pace/raw/master/themes/orange/pace-theme-flash.css">
+  
+  
+
+  <!-- PACE Progress Bar START -->
+
+  
+  <title>luheng&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
   
@@ -33,29 +43,50 @@
     @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
     
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-
-  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
   <link rel="stylesheet" href="/css/style.css">
 
   <script src="/js/jquery-3.1.1.min.js"></script>
 
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="/css/bootstrap.css" >
-  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/hiero.css" >
   <link rel="stylesheet" href="/css/glyphs.css" >
+  
+    <link rel="stylesheet" href="/css/vdonate.css" >
+  
 
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/my.css">
+  <!-- Google Adsense -->
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+      (adsbygoogle = window.adsbygoogle || []).push({
+          google_ad_client: "ca-pub-0123456789ABCDEF",
+          enable_page_level_ads: true
+      });
+  </script>
 </head>
 
+<script>
+var themeMenus = {};
+
+  themeMenus["/"] = "首页"; 
+
+  themeMenus["/archives"] = "归档"; 
+
+  themeMenus["/tags"] = "标签"; 
+
+  themeMenus["/about"] = "关于"; 
+
+  themeMenus["/guestbook"] = "留言"; 
+
+</script>
 
 
   <body>
 
 
-  
-
-
-<header id="allheader" class="site-header" role="banner" 
-   >
+  <header id="allheader" class="site-header" role="banner">
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -64,15 +95,15 @@
               <a href="/" title="luheng&#39;s blog" rel="home"> luheng&#39;s blog </a>
             
           </h1>
-          
+
           
             
           <nav id="main-navigation" class="main-navigation" role="navigation">
             <a class="nav-open">Menu</a>
             <a class="nav-close">Close</a>
-
             <div class="clearfix sf-menu">
-              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+
+              <ul id="main-nav" class="nmenu sf-js-enabled">
                     
                       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">首页</a> </li>
                     
@@ -88,9 +119,39 @@
             </div>
           </nav>
 
+
       </div>
   </div>
 </header>
+
+
+  <div id="originBgDiv" style="background: #fff; width: 100%;">
+
+      <div style="max-height:600px; overflow: hidden;  display: flex; display: -webkit-flex; align-items: center;">
+        <img id="originBg" width="100%" alt="" src="">
+      </div>
+
+  </div>
+
+  <script>
+  function setAboutIMG(){
+      var imgUrls = "css/images/pose.jpg,https://source.unsplash.com/collection/954550/1920x1080".split(",");
+      var random = Math.floor((Math.random() * imgUrls.length ));
+      if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+        document.getElementById("originBg").src=imgUrls[random];
+      } else {
+        document.getElementById("originBg").src='/' + imgUrls[random];
+      }
+  }
+  bgDiv=document.getElementById("originBgDiv");
+  if(location.pathname.match('about')){
+    setAboutIMG();
+    bgDiv.style.display='block';
+  }else{
+    bgDiv.style.display='none';
+  }
+  </script>
+
 
 
   <div id="container">
@@ -116,14 +177,10 @@
     
     <div class="article-meta">
       
-	<a href="/2017/02/28/计算机组成-综述/" class="article-date">
+	Posted on <a href="/2017/02/28/计算机组成-综述/" class="article-date">
 	  <time datetime="2017-02-28T06:24:59.000Z" itemprop="datePublished">二月 28, 2017</time>
 	</a>
 
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/搞硬件/">搞硬件</a>
- 
       
     </div>
     <div class="article-entry" itemprop="articleBody">
@@ -131,8 +188,9 @@
         
 
           
-          <div class="entry-summary">
-          现在是人们常说得互联网时代，相信大家都认识计算机，也就是常说得电脑，那么计算机的定义到底是什么？计算机里面有什么？它们是如何工作的？这些问题后面会有更多的文章去解答，本文主要讲述计算机的定义、历史和组成。说一些大的概念，让大家对计算机有个大体上的认识，这是书写本文的主要目的。
+            <div class="entry-summary" style="margin-left:0;">
+            现在是人们常说得互联网时代，相信大家都认识计算机，也就是常说得电脑，那么计算机的定义到底是什么？计算机里面有什么？它们是如何工作的？这些问题后面会有更多的文章去解答，本文主要讲述计算机的定义、历史和组成。说一些大的概念，让大家对计算机有个大体上的认识，这是书写本文的主要目的。
+          
 
         
           <p class="article-more-link">
@@ -151,8 +209,9 @@
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/硬件/">硬件</a></li></ul>
 
       
+            
+      
     </footer>
-    <hr class="entry-footer-hr">
   </div>
   
 </article>
@@ -176,14 +235,10 @@
     
     <div class="article-meta">
       
-	<a href="/2017/02/23/电热水器的构造和原理/" class="article-date">
+	Posted on <a href="/2017/02/23/电热水器的构造和原理/" class="article-date">
 	  <time datetime="2017-02-23T05:14:05.000Z" itemprop="datePublished">二月 23, 2017</time>
 	</a>
 
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/搞生活/">搞生活</a>
- 
       
     </div>
     <div class="article-entry" itemprop="articleBody">
@@ -191,8 +246,9 @@
         
 
           
-          <div class="entry-summary">
-          之所以写这篇文章，都是怪宿舍那该死的电热水器频频罢工，而且原因不明，修理师傅来了又走，螺丝刀左旋右旋之间，总会换下一些小零件，情况一直不乐观，不过，似乎是被人伺候了，热水器也总是会服服帖帖的工作几日，现在貌似还在服役期间（毕竟修理师傅中午刚来过），可我总是担心它会变坏，毕竟一直都没让我安心，所以我决定考究一番，况且技多不压身，O(∩_∩)O~。
+            <div class="entry-summary" style="margin-left:0;">
+            之所以写这篇文章，都是怪宿舍那该死的电热水器频频罢工，而且原因不明，修理师傅来了又走，螺丝刀左旋右旋之间，总会换下一些小零件，情况一直不乐观，不过，似乎是被人伺候了，热水器也总是会服服帖帖的工作几日，现在貌似还在服役期间（毕竟修理师傅中午刚来过），可我总是担心它会变坏，毕竟一直都没让我安心，所以我决定考究一番，况且技多不压身，O(∩_∩)O~。
+          
 
         
           <p class="article-more-link">
@@ -211,8 +267,9 @@
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/生活/">生活</a></li></ul>
 
       
+            
+      
     </footer>
-    <hr class="entry-footer-hr">
   </div>
   
 </article>
@@ -236,14 +293,10 @@
     
     <div class="article-meta">
       
-	<a href="/2017/02/20/单片机概述/" class="article-date">
+	Posted on <a href="/2017/02/20/单片机概述/" class="article-date">
 	  <time datetime="2017-02-20T08:17:36.000Z" itemprop="datePublished">二月 20, 2017</time>
 	</a>
 
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/搞硬件/">搞硬件</a>
- 
       
     </div>
     <div class="article-entry" itemprop="articleBody">
@@ -251,8 +304,9 @@
         
 
           
-          <div class="entry-summary">
-          现在写作的笔者正在读大二，关于单片机，由于专业相关，我无可避免的与之相遇了，期待这是一场美丽的邂逅。所谓工欲善其事，必先利其器，来来回回看了不少东西，写点东西记录自己所学的知识，后期还会有更多相关的文章。嗯，就这样。
+            <div class="entry-summary" style="margin-left:0;">
+            现在写作的笔者正在读大二，关于单片机，由于专业相关，我无可避免的与之相遇了，期待这是一场美丽的邂逅。所谓工欲善其事，必先利其器，来来回回看了不少东西，写点东西记录自己所学的知识，后期还会有更多相关的文章。嗯，就这样。
+          
 
         
           <p class="article-more-link">
@@ -271,8 +325,9 @@
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/单片机/">单片机</a></li></ul>
 
       
+            
+      
     </footer>
-    <hr class="entry-footer-hr">
   </div>
   
 </article>
@@ -296,14 +351,10 @@
     
     <div class="article-meta">
       
-	<a href="/2017/02/19/markdown的基本使用/" class="article-date">
+	Posted on <a href="/2017/02/19/markdown的基本使用/" class="article-date">
 	  <time datetime="2017-02-19T09:28:15.000Z" itemprop="datePublished">二月 19, 2017</time>
 	</a>
 
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/搞软件/">搞软件</a>
- 
       
     </div>
     <div class="article-entry" itemprop="articleBody">
@@ -311,11 +362,12 @@
         
 
           
-          <div class="entry-summary">
-          关于markdown的简介博主在这里不再赘述啦，如果想了解更多，可以看看下列的链接。
+            <div class="entry-summary" style="margin-left:0;">
+            关于markdown的简介博主在这里不再赘述啦，如果想了解更多，可以看看下列的链接。
 创始人 John Gruber 的 Markdown 语法说明
 Markdown 中文版语法说明
 下面举一些简单的例子
+          
 
         
           <p class="article-more-link">
@@ -334,8 +386,9 @@ Markdown 中文版语法说明
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li></ul>
 
       
+            
+      
     </footer>
-    <hr class="entry-footer-hr">
   </div>
   
 </article>
@@ -359,14 +412,10 @@ Markdown 中文版语法说明
     
     <div class="article-meta">
       
-	<a href="/2017/01/28/hexo-github搭建博客教程/" class="article-date">
+	Posted on <a href="/2017/01/28/hexo-github搭建博客教程/" class="article-date">
 	  <time datetime="2017-01-28T06:07:28.000Z" itemprop="datePublished">一月 28, 2017</time>
 	</a>
 
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/搞软件/">搞软件</a>
- 
       
     </div>
     <div class="article-entry" itemprop="articleBody">
@@ -374,8 +423,9 @@ Markdown 中文版语法说明
         
 
           
-          <div class="entry-summary">
-          前言：博主一开始想拥有一个专属域名的网站，于是便有了后来创建博客的折腾路程，此贴是用来总结下搭建博客的过程，所以写得比较细（其实是怕自己以后忘了），希望对大家搭建博客有所帮助。
+            <div class="entry-summary" style="margin-left:0;">
+            前言：博主一开始想拥有一个专属域名的网站，于是便有了后来创建博客的折腾路程，此贴是用来总结下搭建博客的过程，所以写得比较细（其实是怕自己以后忘了），希望对大家搭建博客有所帮助。
+          
 
         
           <p class="article-more-link">
@@ -394,8 +444,9 @@ Markdown 中文版语法说明
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li></ul>
 
       
+            
+      
     </footer>
-    <hr class="entry-footer-hr">
   </div>
   
 </article>
@@ -413,72 +464,44 @@ Markdown 中文版语法说明
 </section>
           <aside id="sidebar">
   
-    <div style="margin: 20px 0;">
+    <div class="widget-wrap" style="margin: 20px 0;">
 	<div id="search-form-wrap">
 
     <form class="search-form">
-        <label style="width: 72%;">
+        <label style="width: 75%;">
             <span class="screen-reader-text">Search for:</span>
-            <input type="search" class="search-field" style="height: 36px; width: 100%;" placeholder=" 搜索…" value="" name="s" title="Search for:">
+            <input type="search" class="search-field" style="height: 42px;" placeholder=" 搜索…" value="" name="s" title="Search for:">
         </label>
         <input type="submit" class="search-form-submit" value="搜索">
     </form>
     <div class="ins-search">
-
     <div class="ins-search-mask"></div>
-
     <div class="ins-search-container">
-
         <div class="ins-input-wrapper">
-
             <input type="text" class="ins-search-input" placeholder="请输入关键词..."/>
-
             <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
-
         </div>
-
         <div class="ins-section-wrapper">
-
             <div class="ins-section-container"></div>
-
         </div>
-
     </div>
-
 </div>
-
 <script>
-
 (function (window) {
-
     var INSIGHT_CONFIG = {
-
         TRANSLATION: {
-
             POSTS: '文章',
-
             PAGES: '页面',
-
             CATEGORIES: '分类',
-
             TAGS: '标签',
-
             UNTITLED: '(无标题)',
-
         },
-
         ROOT_URL: '/',
-
         CONTENT_URL: '/content.json',
-
     };
-
     window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-
 })(window);
-
 </script>
-
 <script src="/js/insight.js"></script>
 
 </div>
@@ -612,7 +635,33 @@ Markdown 中文版语法说明
 </aside>
         
       </div>
+      <footer id="footer" class="site-footer">
+  
 
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2018 luheng&#39;s blog All Rights Reserved.
+          
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var contentdiv = document.getElementById("content");
+
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+</script>
+
+<!-- Custome JS -->
+<script src="/js/my.js"></script>
     </div>
     <!-- <nav id="mobile-nav">
   
@@ -627,41 +676,7 @@ Markdown 中文版语法说明
     <a href="/guestbook" class="mobile-nav-link">guestbook</a>
   
 </nav> -->
-    <footer id="footer" class="site-footer">
-  
-
-  <div class="clearfix container">
-      <div class="site-info">
-	      &copy; 2018 luheng&#39;s blog All Rights Reserved.
-        
-            <span id="busuanzi_container_site_uv">
-              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
-              本站总访问量<span id="busuanzi_value_site_pv"></span>次
-            </span>
-          
-      </div>
-  </div>
-</footer>
-
-
-<!-- min height -->
-
-<script>
-    var wrapdiv = document.getElementById("wrap");
-    var contentdiv = document.getElementById("content");
-
-    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
-    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
-
-
-    <!-- headerblur min height -->
     
-    
-</script>
-    
-<div style="display: none;">
-  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
-</div>
 
 <!-- mathjax config similar to math.stackexchange -->
 
@@ -699,7 +714,7 @@ Markdown 中文版语法说明
   <script src="/fancybox/jquery.fancybox.pack.js"></script>
 
 
-<script src="/js/script.js"></script>
+<script src="/js/scripts.js"></script>
 <script src="/js/bootstrap.js"></script>
 <script src="/js/main.js"></script>
 
