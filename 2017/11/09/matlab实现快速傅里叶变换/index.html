@@ -45,8 +45,6 @@
 <meta name="twitter:description" content="傅里叶变换是能将信号从时域转到频域的一种变换形式，是我们分析信号的常用方法，毕竟相比于时域的纷乱复杂，频域显得清爽很多。有关傅里叶变换的理解，可以看我之前转载的一篇文章：【转载】傅里叶分析之掐死教程（完整版） 。本篇文章主要介绍快速傅里叶变换（FFT）的一种，基2FFT，讲诉计算原理和提供相应的matlab代码。">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/sirlh/photo/master/matlab/FFT/xn.PNG">
   
-    <link rel="alternate" href="/atom.xml" title="luheng&#39;s blog" type="application/atom+xml">
-  
   <link rel="icon" href="/css/images/favicon.ico">
   
     <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
@@ -98,6 +96,8 @@ var themeMenus = {};
 
   themeMenus["/guestbook"] = "留言"; 
 
+  themeMenus["/atom.xml"] = "rss"; 
+
 </script>
 
 
@@ -132,6 +132,8 @@ var themeMenus = {};
                       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">关于</a> </li>
                     
                       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/guestbook">留言</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/atom.xml">rss</a> </li>
                     
               </ul>
             </div>
@@ -359,6 +361,8 @@ var a = new Donate({
     <a href="/about" class="mobile-nav-link">About</a>
   
     <a href="/guestbook" class="mobile-nav-link">guestbook</a>
+  
+    <a href="/atom.xml" class="mobile-nav-link">rss</a>
   
 </nav> -->
     
